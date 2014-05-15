@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="struts/struts-1.2.7.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/konakart_build/lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="/konakart_build/lib/gwt-dev.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

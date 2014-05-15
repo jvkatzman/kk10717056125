@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.17" id="1">
+    <property name="author">DS Data Systems UK Ltd</property>
+    <property name="createdBy">Eclipse BIRT Designer Version 2.6.1.v20100902 Build &lt;2.6.1.v20100915-1750></property>
+    <property name="units">cm</property>
+    <text-property name="title">Products To Re-Order</text-property>
+    <property name="comments">Copyright (c) 2007 DS Data Systems UK Ltd</property>
+    <html-property name="description">Products To Re-Order</html-property>
+    <property name="theme">konakart.KonaKartTheme</property>
+    <text-property name="displayName">Products To Re-Order</text-property>
+    <list-property name="libraries">
+        <structure>
+            <property name="fileName">lib/konakart.rptlibrary</property>
+            <property name="namespace">konakart</property>
+        </structure>
+    </list-property>
+    <parameters>
+        <scalar-parameter name="storeId" id="141">
+            <property name="hidden">true</property>
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <text-property name="promptText">Store Id</text-property>
+            <property name="isRequired">false</property>
+            <property name="controlType">text-box</property>
+            <property name="defaultValue">store1</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="KonaKart-Database" id="99"
+ extends="konakart.KonaKart-Database">
+            <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
+            <property name="odaURL">jdbc:mysql://localhost:3306/store1?zeroDateTimeBehavior=convertToNull</property>
+            <property name="odaUser">toot</property>
+        </oda-data-source>
+    </data-sources>
+    <data-sets>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Products_DataSet" id="42">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">productid</property>
+                    <property name="alias">PRODUCTID</property>
+                    <property name="displayName">ProductId</property>
+                </structure>
+                <structure>
+                    <property name="columnName">name</property>
+                    <property name="alias">NAME</property>
+                    <property name="displayName">Name</property>
+                </structure>
+                <structure>
+                    <property name="columnName">model</property>
+                    <property name="alias">MODEL</property>
+                    <property name="displayName">Model</property>
+                </structure>
+                <structure>
+                    <property name="columnName">quantity</property>
+                    <property name="alias">QUANTITY</property>
+                    <property name="displayName">Quantity</property>
+                </structure>
+                <structure>
+                    <property name="columnName">sku</property>
+                    <property name="alias">SKU</property>
+                    <property name="displayName">SKU</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">PRODUCTID</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">NAME</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">MODEL</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">QUANTITY</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">SKU</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">KonaKart-Database</property>
+            <method name="beforeOpen"><![CDATA[importPackage(Packages.java.util.logging);
+
+//var kkLog = Logger.getLogger("com.konakart.reports");
+//kkLog.fine("ProductsToReOrder.beforeOpen() Set the appropriate query for the dbType"); 
+
+var storeId = params["storeId"];
+dbparams = reportContext.getGlobalVariable("dbParameters");
+
+dbType = dbparams.getDbType();
+
+//kkLog.fine("ProductsToReOrder.beforeOpen() DataSource dbType = " + dbType);
+
+engineMode = dbparams.getEngineMode();
+
+//kkLog.fine("ProductsToReOrder.beforeOpen() Engine Mode = " + engineMode);
+
+//kkLog.fine("ProductsToReOrder.beforeOpen() storeId = " + storeId);
+
+var productStoreId = "";
+var c1StoreId = "";
+var c2StoreId = "";
+var fromProdToStores = "";
+
+if (engineMode == 2)
+{
+	if (dbparams.isProductsShared())
+	{
+		productStoreId = " and p.products_id = kk_product_to_stores.products_id and kk_product_to_stores.store_id='" + storeId + "' ";
+		fromProdToStores = ", kk_product_to_stores " 
+	} else
+	{
+		productStoreId = " and p.store_id = '" + storeId + "' ";
+	}
+	c1StoreId = " and c1.store_id = '" + storeId + "' ";
+	c2StoreId = " and c2.store_id = '" + storeId + "' ";
+}
+
+this.queryText = "select distinct p.products_id as PRODUCTID, products_name as NAME, p.products_model as MODEL, p.products_quantity as QUANTITY, p.products_sku as SKU  from products p, products_description, configuration c1, configuration c2, languages" + fromProdToStores + " where p.products_id=products_description.products_id " + productStoreId + " and products_description.language_id = languages.languages_id and languages.code = c1.configuration_value  and c1.configuration_key='DEFAULT_LANGUAGE' " + c1StoreId + " and (p.products_date_available is null or p.products_date_available < now()) and ((p.products_quantity < p.stock_reorder_level and p.stock_reorder_level != -1)    or (p.products_quantity < ( 	select c2.configuration_value from configuration c2  	where c2.configuration_key='STOCK_REORDER_LEVEL' " + c2StoreId + "))) union  select distinct p.products_id as PRODUCTID, products_name as NAME, p.products_model as MODEL, products_quantity.products_quantity as QUANTITY, products_quantity.products_sku as SKU from products p, products_description, configuration c1, languages, products_quantity where p.products_id=products_description.products_id " + c1StoreId + "  and p.products_id = products_quantity.products_id and products_description.language_id = languages.languages_id and languages.code = c1.configuration_value and c1.configuration_key='DEFAULT_LANGUAGE' " +  c1StoreId + " and (products_quantity.products_date_available is null or products_quantity.products_date_available <  now()) and ((products_quantity.products_quantity < p.stock_reorder_level and p.stock_reorder_level != -1) or (products_quantity.products_quantity < (	select c2.configuration_value from configuration c2 	where c2.configuration_key='STOCK_REORDER_LEVEL' " + c2StoreId + "))) order by Name, Model";
+
+if (dbType == "oracle")
+{
+	this.queryText = this.queryText.replaceAll("now\\(\\)", "sysdate");
+} else if (dbType == "mssql")
+{
+	this.queryText = this.queryText.replaceAll("now", "getdate");
+} else if (dbType == "postgresql")
+{
+	this.queryText = this.queryText.replaceAll("c2.configuration_value", "to_number(c2.configuration_value, 'S999999')"); 
+} else if (dbType == "db2net")
+{
+	this.queryText = this.queryText.replaceAll("now\\(\\)", "current timestamp"); 
+	this.queryText = this.queryText.replaceAll("c2.configuration_value", "int(c2.configuration_value)"); 
+}
+
+//kkLog.info("ProductsToReOrder.beforeOpen() SQL = " + this.queryText);
+
+]]></method>
+            <method name="onFetch"><![CDATA[importPackage(Packages.com.konakart.reports);
+importPackage(Packages.java.util.logging);
+
+/*
+row["PriceText"] = priceFormatter.formatPrice(row["PRODUCTS_PRICE"]);
+
+if (row["PriceText"] == null)
+{
+	row["PriceText"] = "";
+}
+
+//var kkLog = Logger.getLogger("com.konakart.reports");
+//kkLog.fine("ProductList.onFetch() formatPrice[" + row["PRODUCTS_PRICE"] + "] = " + row["PriceText"]); 
+*/]]></method>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">PRODUCTID</property>
+                    <property name="nativeName">PRODUCTID</property>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">NAME</property>
+                    <property name="nativeName">NAME</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">MODEL</property>
+                    <property name="nativeName">MODEL</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">QUANTITY</property>
+                    <property name="nativeName">QUANTITY</property>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">SKU</property>
+                    <property name="nativeName">SKU</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <property name="queryText">select distinct p.products_id as PRODUCTID, products_name as NAME, p.products_model 
+as MODEL, p.products_quantity as QUANTITY, p.products_sku as SKU  from products p, products_description, configuration c1, 
+configuration c2, languages where p.products_id=products_description.products_id  and p.store_id = 'store1'  
+and products_description.language_id = languages.languages_id and languages.code = c1.configuration_value  
+and c1.configuration_key='DEFAULT_LANGUAGE'  and c1.store_id = 'store1'  and (p.products_date_available is null 
+or p.products_date_available &lt; now()) and ((p.products_quantity &lt; p.stock_reorder_level and p.stock_reorder_level != -1)    
+or (p.products_quantity &lt; (    select to_number(c2.configuration_value, 'S999999') from configuration c2     
+where c2.configuration_key='STOCK_REORDER_LEVEL'  and c2.store_id = 'store1' ))) 
+union  
+select distinct p.products_id as PRODUCTID, products_name as NAME, p.products_model as MODEL, 
+products_quantity.products_quantity as QUANTITY, products_quantity.products_sku as SKU from products p, products_description, 
+configuration c1, languages, products_quantity where p.products_id=products_description.products_id and c1.store_id = 'store1'   
+and p.products_id = products_quantity.products_id and products_description.language_id = languages.languages_id 
+and languages.code = c1.configuration_value and c1.configuration_key='DEFAULT_LANGUAGE'  and c1.store_id = 'store1'  
+and (products_quantity.products_date_available is null or products_quantity.products_date_available &lt;  now()) 
+and ((products_quantity.products_quantity &lt; p.stock_reorder_level and p.stock_reorder_level != -1) 
+or (products_quantity.products_quantity &lt; ( select to_number(c2.configuration_value, 'S999999') from configuration c2     
+where c2.configuration_key='STOCK_REORDER_LEVEL'  and c2.store_id = 'store1' ))) order by Name, Model</property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>1.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>products_model</design:name>
+            <design:position>1</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>12</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Nullable</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>products_model</design:label>
+            <design:formattingHints>
+              <design:displaySize>12</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>products_quantity</design:name>
+            <design:position>2</design:position>
+            <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+            <design:precision>4</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>NotNullable</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>products_quantity</design:label>
+            <design:formattingHints>
+              <design:displaySize>4</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>products_price</design:name>
+            <design:position>3</design:position>
+            <design:nativeDataTypeCode>3</design:nativeDataTypeCode>
+            <design:precision>15</design:precision>
+            <design:scale>4</design:scale>
+            <design:nullability>NotNullable</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>products_price</design:label>
+            <design:formattingHints>
+              <design:displaySize>17</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+    </data-sets>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <property name="type">a4</property>
+            <page-footer>
+                <grid id="3">
+                    <property name="width">100%</property>
+                    <column id="4"/>
+                    <row id="5">
+                        <cell id="6">
+                            <text id="7">
+                                <property name="borderTopColor">#000000</property>
+                                <property name="borderTopStyle">solid</property>
+                                <property name="borderTopWidth">thin</property>
+                                <property name="contentType">html</property>
+                                <text-property name="content"><![CDATA[<center>Products To Re-Order - <value-of>new Date()</value-of> - Powered by KonaKart</center>]]></text-property>
+                            </text>
+                        </cell>
+                    </row>
+                </grid>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <grid id="8">
+            <property name="height">0.333in</property>
+            <property name="width">100%</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">StoreId</property>
+                    <property name="displayName">StoreId</property>
+                    <expression name="expression">params["storeId"].value</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <column id="9"/>
+            <row id="10">
+                <property name="height">0.333in</property>
+                <property name="verticalAlign">text-bottom</property>
+                <cell id="11">
+                    <property name="borderTopColor">#000000</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">top</property>
+                    <label id="12">
+                        <property name="fontFamily">sans-serif</property>
+                        <property name="fontWeight">bold</property>
+                        <property name="textUnderline">underline</property>
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Products To Re-Order</text-property>
+                    </label>
+                </cell>
+            </row>
+        </grid>
+        <table name="ProductsReOrderTable" id="155">
+            <property name="style">konakart-list-table</property>
+            <property name="width">100%</property>
+            <property name="dataSet">Products_DataSet</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">NAME</property>
+                    <property name="displayName">Name</property>
+                    <expression name="expression">dataSetRow["NAME"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">MODEL</property>
+                    <property name="displayName">Model</property>
+                    <expression name="expression">dataSetRow["MODEL"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">SKU</property>
+                    <property name="displayName">SKU</property>
+                    <expression name="expression">dataSetRow["SKU"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">PRODUCTID</property>
+                    <property name="displayName">ProductId</property>
+                    <expression name="expression">dataSetRow["PRODUCTID"]</expression>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="name">QUANTITY</property>
+                    <property name="displayName">Quantity</property>
+                    <expression name="expression">dataSetRow["QUANTITY"]</expression>
+                    <property name="dataType">integer</property>
+                </structure>
+            </list-property>
+            <column id="198"/>
+            <column id="171"/>
+            <column id="172"/>
+            <column id="173"/>
+            <column id="174"/>
+            <header>
+                <row id="156">
+                    <cell id="195">
+                        <label name="ProductId" id="199">
+                            <property name="style">konakart-column-heading-center</property>
+                            <text-property name="text">ProductId</text-property>
+                        </label>
+                    </cell>
+                    <cell id="157">
+                        <label id="179">
+                            <property name="style">konakart-column-heading-left</property>
+                            <text-property name="text">Name</text-property>
+                        </label>
+                    </cell>
+                    <cell id="158">
+                        <label id="180">
+                            <property name="style">konakart-column-heading-left</property>
+                            <text-property name="text">Model</text-property>
+                        </label>
+                    </cell>
+                    <cell id="159">
+                        <label id="181">
+                            <property name="style">konakart-column-heading-center</property>
+                            <text-property name="text">Quantity</text-property>
+                        </label>
+                    </cell>
+                    <cell id="160">
+                        <label id="182">
+                            <property name="style">konakart-column-heading-left</property>
+                            <text-property name="text">SKU</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="161">
+                    <cell id="196">
+                        <data id="200">
+                            <property name="style">konakart-table-data-center</property>
+                            <property name="resultSetColumn">PRODUCTID</property>
+                        </data>
+                    </cell>
+                    <cell id="162">
+                        <data id="184">
+                            <property name="style">konakart-table-data-left</property>
+                            <property name="resultSetColumn">NAME</property>
+                        </data>
+                    </cell>
+                    <cell id="163">
+                        <data id="185">
+                            <property name="style">konakart-table-data-left</property>
+                            <property name="resultSetColumn">MODEL</property>
+                        </data>
+                    </cell>
+                    <cell id="164">
+                        <data id="186">
+                            <property name="style">konakart-table-data-center</property>
+                            <property name="resultSetColumn">QUANTITY</property>
+                        </data>
+                    </cell>
+                    <cell id="165">
+                        <data id="187">
+                            <property name="style">konakart-table-data-left</property>
+                            <property name="resultSetColumn">SKU</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="166">
+                    <cell id="197"/>
+                    <cell id="167"/>
+                    <cell id="168"/>
+                    <cell id="169"/>
+                    <cell id="170"/>
+                </row>
+            </footer>
+        </table>
+    </body>
+</report>

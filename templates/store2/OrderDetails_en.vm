@@ -1,0 +1,255 @@
+<html>
+	<head>
+		<title>Order Details</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		#include("${templateBase}/style_order.vm")
+	</head>
+	<body>
+		<table border="0" width="100%" class="font">
+			<tr>
+				<td class="title">
+					<a href="http://www.konakart.com">
+						<img src="${imageBaseUrl}/logo.png" border="0" alt="KonaKart v${KonaKartVersion}"/>
+					</a>
+				</td>
+				<td class="title">
+					 $storeName - Order Details
+				</td>
+			</tr>
+		</table>
+    		
+    	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+			<colgroup>
+				<col width="20%"></col>
+				<col width="80%"></col>
+			</colgroup>
+         	<tr>
+            	<td colspan="2"><hr class="spacerLine"/></td>
+          	</tr>
+ 			<tr>
+				<td class="main"><b>Order Number:</b></td>
+				<td class="main">$order.getId()</td>
+			</tr>
+			<tr>
+				<td class="main"><b>Date Ordered:</b></td>
+				<td class="main">$dateTool.format('d-MMM-yyyy HH:mm:ss',$order.getDatePurchased(),$locale)</td>
+			</tr>
+         </table>
+         
+    	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+          <tr>
+            <td colspan="3"><hr class="spacerLine"/></td>
+          </tr>
+          <tr>
+            <td valign="top">
+            	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+              		<tr>
+                		<td class="main" valign="top"><b>Customer:</b></td>
+                		<td class="main">$order.getCustomerFormattedAddress()</td>
+              		</tr>
+            	</table>
+            </td>
+            <td valign="top">
+            	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+					<tr>
+						<td class="main" valign="top"><b>Shipping Address:</b></td>
+						<td class="main">$order.getDeliveryFormattedAddress()</td>
+					</tr>
+            	</table>
+            </td>
+            <td valign="top">
+            	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+					<tr>
+						<td class="main" valign="top"><b>Billing Address:</b></td>
+						<td class="main">$order.getBillingFormattedAddress()</td>
+					</tr>
+            	</table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3"><hr class="spacerLine"/></td>
+          </tr>
+       </table>
+
+		<table width="100%" border="0" cellspacing="0" cellpadding="2">
+			<colgroup span="2">
+				<col width="20%"></col>
+				<col width="80%"></col>
+			</colgroup>		
+          <tr>
+          	<td class="main"><b>Telephone Number:</b></td>
+            <td class="main">$order.getCustomerTelephone()</td>
+          </tr>
+          <tr>
+          	<td class="main"><b>E-Mail Address:</b></td>
+            <td class="main"><a href="mailto:$order.getCustomerEmail()"><u>$order.getCustomerEmail()</u></a></td>
+          </tr>
+          <tr>
+          	<td class="main"><b>Payment Method:</b></td>
+            <td class="main">$order.getPaymentMethod()</td>
+          </tr>
+          #if ( $order.getCreator() )
+          <tr>
+          	<td class="main"><b>Order Creator:</b></td>
+            <td class="main">$order.getCreator()</td>
+          </tr>
+          #end
+        </table>
+		#if ( $vendorOrders )
+			<table border="0" width="100%" cellspacing="0" cellpadding="2">
+				#foreach( $vo in $vendorOrders )
+					<tr><td class="storeName" colspan="5">$vo.getStoreName() - $vo.getStoreId()</td></tr>
+					<tr class="dataTableHeadingRow1">
+						<td class="dataTableHeadingContent kkLeft">Product</td>
+						<td class="dataTableHeadingContent kkLeft">Model</td>
+						<td class="dataTableHeadingContent kkRight">Qty.</td>
+						<td class="dataTableHeadingContent kkRight">Price</td>
+						<td class="dataTableHeadingContent kkRight">Total</td>
+					</tr>
+					#foreach( $op in $vo.getOrderProducts() )
+						<tr>
+						<td class="dataTableContent kkLeft">$esc.html($op.getName())
+						#foreach( $option in $op.getOpts() )
+							#if ( $option.getType() == 1 )
+								<br/><nobr><small> <i>-$option.getName(): $option.getQuantity() $option.getValue()</i></small></nobr>
+							#else
+								<br/><nobr><small> <i>-$option.getName(): $option.getValue()</i></small></nobr>
+							#end
+						#end
+						</td>
+						<td class="dataTableContent kkLeft">$op.getModel()</td>
+						<td class="dataTableContent kkRight">$op.getQuantity()</td>
+						#if ( $displayPricesWithTax )
+							<td class="dataTableContent kkRight">$currencyMgr.formatPrice($op.getFinalPriceIncTax(),$vo.getCurrencyCode())</td>
+						#else
+							<td class="dataTableContent kkRight">$currencyMgr.formatPrice($op.getFinalPriceExTax(),$vo.getCurrencyCode())</td>
+						#end
+						#if ( $displayPricesWithTax )
+							<td class="dataTableContent kkRight">$currencyMgr.formatPrice($op.getTotalPriceIncTax(),$vo.getCurrencyCode())</td>
+						#else
+							<td class="dataTableContent kkRight">$currencyMgr.formatPrice($op.getTotalPriceExTax(),$vo.getCurrencyCode())</td>
+						#end
+						</tr>
+					#end
+					<tr><td colspan="5">&#160;</td></tr>
+					<tr>
+						<td colspan="5">
+							<table border="0" cellspacing="0" cellpadding="0" width="100%">
+								#foreach( $ot in $vo.getOrderTotals() )
+								<tr>
+									#if ( $ot.getClassName() == "ot_total" )
+										<td  width="85%" class="dataTableContent kkRight"><b>$ot.getTitle()</b></td>
+										<td  class="dataTableContent kkRight"><b>$ot.getText()</b></td>
+									#else
+										<td  width="85%" class="dataTableContent kkRight">$ot.getTitle()</td>
+										<td  class="dataTableContent kkRight">$ot.getText()</td>
+									#end
+								</tr>
+								#end
+							</table>
+						</td>
+					</tr>
+				#end								
+				<tr>
+					<td colspan="5"><hr class="spacerLine"/></td>
+				</tr>
+			</table>		
+		#else
+			<table border="0" width="100%" cellspacing="0" cellpadding="2">
+				<tr><td colspan="5">&#160;</td></tr>
+				<tr class="dataTableHeadingRow">
+					<td class="dataTableHeadingContent kkLeft">Product</td>
+					<td class="dataTableHeadingContent kkLeft">Model</td>
+					<td class="dataTableHeadingContent kkRight" >Qty.</td>
+					<td class="dataTableHeadingContent kkRight" >Price</td>
+					<td class="dataTableHeadingContent kkRight" >Total</td>
+				</tr>
+				#foreach( $op in $order.getOrderProducts() )
+					<tr>
+					<td class="dataTableContent kkLeft">$esc.html($op.getName())
+					#foreach( $option in $op.getOpts() )
+						#if ( $option.getType() == 1 )
+							<br/><nobr><small> <i>-$option.getName(): $option.getQuantity() $option.getValue()</i></small></nobr>
+						#else
+							<br/><nobr><small> <i>-$option.getName(): $option.getValue()</i></small></nobr>
+						#end
+					#end
+					</td>
+					<td class="dataTableContent kkLeft">$op.getModel()</td>
+					<td class="dataTableContent kkRight" >$op.getQuantity()</td>
+					#if ( $displayPricesWithTax )
+						<td class="dataTableContent kkRight" >$currencyMgr.formatPrice($op.getFinalPriceIncTax(),$order.getCurrencyCode())</td>
+					#else
+						<td class="dataTableContent kkRight" >$currencyMgr.formatPrice($op.getFinalPriceExTax(),$order.getCurrencyCode())</td>
+					#end
+					#if ( $displayPricesWithTax )
+						<td class="dataTableContent kkRight" >$currencyMgr.formatPrice($op.getTotalPriceIncTax(),$order.getCurrencyCode())</td>
+					#else
+						<td class="dataTableContent kkRight" >$currencyMgr.formatPrice($op.getTotalPriceExTax(),$order.getCurrencyCode())</td>
+					#end
+					</tr>
+				#end
+				<tr>
+					<td colspan="5"><hr class="spacerLine"/></td>
+				</tr>
+			</table>
+		#end
+		<table border="0" width="100%" cellspacing="0" cellpadding="2">
+			<tr>
+				<td align="right" colspan="5">
+					<table border="0" cellspacing="0" cellpadding="2" width="100%">
+						#foreach( $ot in $order.getOrderTotals() )
+						<tr>
+							#if ( $ot.getClassName() == "ot_total" )
+								<td  width="85%" class="dataTableContentLarge kkRight">$ot.getTitle()</td>
+								<td  class="dataTableContentLarge kkRight">$ot.getText()</td>
+							#else
+								<td  width="85%" class="dataTableContent kkRight">$ot.getTitle()</td>
+								<td  class="dataTableContent kkRight">$ot.getText()</td>
+							#end
+						</tr>
+						#end
+					</table>
+				</td>
+			</tr>
+		</table>
+
+	
+		<table border="0" cellspacing="0" cellpadding="5" width="100%">
+			<colgroup span="5">
+				<col width="20%"></col>
+				<col width="10%"></col>
+				<col width="15%"></col>
+				<col width="10%"></col>
+				<col width="45%"></col>
+			</colgroup>
+			<tr><td colspan="5">&#160;</td></tr>
+			<tr class="dataTableHeadingRow">
+				<td class="dataTableHeadingContent kkLeft">Date Added</td>
+				<td class="dataTableHeadingContent kkLeft">Customer Notified</td>
+				<td class="dataTableHeadingContent kkLeft">Status</td>
+				<td class="dataTableHeadingContent kkLeft">Updated By</td>
+				<td class="dataTableHeadingContent kkLeft">Comments</td>
+			</tr>
+			#foreach( $osh in $order.getStatusTrail() )
+				<tr>
+					<td class="dataTableContent kkLeft">$dateTool.format('d-MMM-yyyy HH:mm:ss',$osh.getDateAdded(),$locale)</td>
+					#if ( $osh.isCustomerNotified() )
+						<td class="dataTableContent kkLeft"><img src="${imageBaseUrl}/tick.gif" border="0" alt="Yes" title=" Yes "/></td>
+					#else
+						<td class="dataTableContent kkLeft"><img src="${imageBaseUrl}/cross.gif" border="0" alt="No" title=" No "/></td>
+					#end
+					<td class="dataTableContent kkLeft">$osh.getOrderStatus()</td>
+					<td class="dataTableContent kkLeft">$osh.getUpdatedById()</td>
+					#if ( $osh.getComments().length() > 0 )
+						<td class="dataTableContent kkLeft">$osh.getComments()</td>
+					#else
+						<td class="dataTableContent kkLeft">&#160;</td>
+					#end
+				</tr>
+			#end
+			<tr><td colspan="5">&#160;</td></tr>
+        </table>
+
+	</body> 
+</html>

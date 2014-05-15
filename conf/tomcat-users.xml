@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<tomcat-users>
+  <role rolename="tomcat"/>
+  <role rolename="konakartAdmin"/>
+  <user username="tomcat" password="tomcat" roles="tomcat"/>
+  <user username="KonaAdmin" password="AdminKK" roles="tomcat,konakartAdmin"/>
+  <role rolename="manager-gui" />
+  <user name="admin" password="qrzt6hy7gh8901" roles="manager-gui" />
+</tomcat-users>

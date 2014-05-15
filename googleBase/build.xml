@@ -1,0 +1,57 @@
+<project name="konakart_publish_products_examples" default="build" basedir=".">
+
+	<!-- === PROPERTIES === -->
+	<property environment="env" />
+
+	<path id="kklibs.path">
+		<fileset dir="../webapps/konakartadmin/WEB-INF/lib/">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="compile.path">
+		<path location="./classes" />
+		<path refid="kklibs.path" />
+	</path>
+
+	<target name="clean" description="Clears away everything that's created during a build">
+		<echo message="Cleanup..." />
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="./classes" />
+		</delete>
+	</target>
+
+	<target name="compile" description="Compile the example">
+		<echo message="Compile the example" />
+
+		<mkdir dir="./classes" />
+		<javac srcdir="./src/"
+		       destdir="./classes"
+		       debug="off"
+		       fork="yes"
+		       source="1.6"
+		       target="1.6"
+		       includes="**/Custom*.java">
+			<classpath refid="compile.path" />
+		</javac>
+	</target>
+
+	<target name="deploy" description="Deploy the example to the konakartadmin webapp">
+		<echo message="Deploy the example to the konakartadmin webapp" />
+
+		<mkdir dir="../webapps/konakartadmin/WEB-INF/classes/com/konakartadmin/bl" />
+		<copy todir="../webapps/konakartadmin/WEB-INF/classes/com/konakartadmin/bl">
+			<fileset dir="./classes/com/konakartadmin/bl">
+				<include name="*.class" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build"
+	        description="Compiles and runs some examples"
+	        depends="
+			clean,
+            compile
+		    " />
+
+</project>

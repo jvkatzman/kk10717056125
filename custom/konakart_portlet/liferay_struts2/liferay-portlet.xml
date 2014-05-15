@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.1.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
+
+<liferay-portlet-app>
+	<portlet>
+		<portlet-name>KonaKart_Storefront</portlet-name>
+		<instanceable>false</instanceable>
+		<header-portlet-css>/styles/kk-style.css</header-portlet-css>
+		<header-portlet-css>/styles/jquery.selectboxit.css</header-portlet-css>
+		<header-portlet-css>http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css</header-portlet-css>
+		
+		<header-portlet-javascript>https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js</header-portlet-javascript>
+		<header-portlet-javascript>https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.validate.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.json-2.3.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.tools.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.selectboxit.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.ui.datepicker-en.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.ui.datepicker-de.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.ui.datepicker-pt.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.ui.datepicker-es.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/ddpowerzoomer.js</header-portlet-javascript>
+		<!-- 
+		/***********************************************
+		* Image Power Zoomer- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+		* This notice MUST stay intact for legal use
+		* Visit Dynamic Drive at http://www.dynamicdrive.com/ for this script and 100s more
+		***********************************************/
+		 -->
+		<header-portlet-javascript>/script/jquery.jcarousel.min.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/jquery.cookie.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/kk.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/kk.validation.js</header-portlet-javascript>
+		<header-portlet-javascript>/script/kk.proddetails.js</header-portlet-javascript>
+		
+		<css-class-wrapper>konakart_struts2_liferay-portlet</css-class-wrapper>
+	</portlet>
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
+</liferay-portlet-app>

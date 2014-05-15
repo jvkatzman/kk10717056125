@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.17" id="1">
+    <property name="author">DS Data Systems UK Ltd</property>
+    <property name="createdBy">Eclipse BIRT Designer Version 2.6.1.v20100902 Build &lt;2.6.1.v20100915-1750></property>
+    <property name="units">cm</property>
+    <text-property name="title">Top Product Sales</text-property>
+    <property name="comments">Copyright (c) 2007 DS Data Systems UK Ltd.</property>
+    <html-property name="description">Top Product Sales</html-property>
+    <property name="theme">konakart.KonaKartTheme</property>
+    <text-property name="displayName">Top Product Sales</text-property>
+    <list-property name="libraries">
+        <structure>
+            <property name="fileName">lib/konakart.rptlibrary</property>
+            <property name="namespace">konakart</property>
+        </structure>
+    </list-property>
+    <parameters>
+        <scalar-parameter name="limitNumber" id="141">
+            <text-property name="helpText">Specify how many products - eg. the top 10, or top 50 etc</text-property>
+            <property name="valueType">static</property>
+            <property name="dataType">integer</property>
+            <text-property name="promptText">How many products?</text-property>
+            <property name="controlType">text-box</property>
+            <property name="defaultValue">10</property>
+            <structure name="format">
+                <property name="category">Fixed</property>
+                <property name="pattern">###0</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="storeId" id="142">
+            <property name="hidden">true</property>
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <text-property name="promptText">Store Id</text-property>
+            <property name="isRequired">false</property>
+            <property name="controlType">text-box</property>
+            <property name="defaultValue">store1</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="KonaKart-Database" id="99"
+ extends="konakart.KonaKart-Database"/>
+    </data-sources>
+    <data-sets>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="TopProductSales" id="42">
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">products_name</property>
+                    <property name="alias">PRODUCTS_NAME</property>
+                </structure>
+                <structure>
+                    <property name="columnName">products_model</property>
+                    <property name="alias">PRODUCTS_MODEL</property>
+                </structure>
+                <structure>
+                    <property name="columnName">products_id</property>
+                    <property name="alias">PRODUCTS_ID</property>
+                </structure>
+                <structure>
+                    <property name="columnName">totqty</property>
+                    <property name="alias">TOTQTY</property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">PRODUCTS_NAME</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">PRODUCTS_MODEL</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">PRODUCTS_ID</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">TOTQTY</property>
+                        <property name="dataType">float</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">KonaKart-Database</property>
+            <method name="beforeOpen"><![CDATA[importPackage(Packages.java.util.logging);
+importPackage(Packages.com.konakart.reports);
+
+//var kkLog = Logger.getLogger("com.konakart.reports");
+//kkLog.fine("TopProductsList.beforeOpen() Set the appropriate query for the dbType"); 
+
+var storeId = params["storeId"];
+dbparams = reportContext.getGlobalVariable("dbParameters");
+
+dbType = dbparams.getDbType();
+
+//kkLog.fine("TopProductsList.beforeOpen() DataSource dbType = " + dbType);
+
+engineMode = dbparams.getEngineMode();
+
+//kkLog.fine("TopProductsList.beforeOpen() Engine Mode = " + engineMode);
+
+storeAnd = "";
+whereStore = "";
+
+if (engineMode == 2)
+{
+	storeAnd = " orders_products.store_id = '" + storeId + "' and ";
+	whereStore = " where orders_products.store_id = '" + storeId + "' ";
+}
+
+if (dbType == "oracle")
+{
+this.queryText = "select * from (SELECT orders_products.products_name,orders_products.products_model,orders_products.products_id,sum(orders_products.products_quantity) totqty FROM orders_products " + whereStore + " group by orders_products.products_id,orders_products.products_name,orders_products.products_model order by totqty desc) where rownum <= ?";
+} else if (dbType == "mssql")
+{
+this.queryText = "SELECT TOP " + params["limitNumber"] + " orders_products.products_name, orders_products.products_model, orders_products.products_id, sum(orders_products.products_quantity) totqty FROM orders_products where " + storeAnd + " orders_products.products_id > -? group by orders_products.products_id,orders_products.products_name,orders_products.products_model order by totqty desc";
+} else if (dbType == "db2net")
+{
+this.queryText = "SELECT products_name, products_model, products_id, sum(products_quantity) totqty FROM orders_products where " + storeAnd + " products_id > -? group by products_id,products_name, products_model order by totqty desc fetch first " + params["limitNumber"] + " rows only";
+}
+else
+{
+this.queryText = "SELECT orders_products.products_name,orders_products.products_model,orders_products.products_id,sum(orders_products.products_quantity) as totqty FROM orders_products " + whereStore + " group by orders_products.products_id,orders_products.products_name,orders_products.products_model order by totqty desc limit ?";
+}
+
+//kkLog.info("TopProductsList.beforeOpen() SQL = " + this.queryText);]]></method>
+            <list-property name="parameters">
+                <structure>
+                    <property name="name">limitNumber</property>
+                    <property name="paramName">limitNumber</property>
+                    <property name="dataType">integer</property>
+                    <property name="position">1</property>
+                    <expression name="defaultValue">10</expression>
+                    <property name="isInput">true</property>
+                    <property name="isOutput">false</property>
+                </structure>
+            </list-property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">products_name</property>
+                    <property name="nativeName">products_name</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">products_model</property>
+                    <property name="nativeName">products_model</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">products_id</property>
+                    <property name="nativeName">products_id</property>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">totqty</property>
+                    <property name="nativeName">totqty</property>
+                    <property name="dataType">float</property>
+                </structure>
+            </list-property>
+            <property name="queryText">
+       SELECT orders_products.products_name, 
+              orders_products.products_model,
+              orders_products.products_id,
+              sum(orders_products.products_quantity) as totqty
+       FROM orders_products 
+       group by orders_products.products_id, 
+                orders_products.products_name, 
+                orders_products.products_model 
+       order by totqty desc
+       limit ?
+</property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>1.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>products_model</design:name>
+            <design:position>1</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>12</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>Nullable</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>products_model</design:label>
+            <design:formattingHints>
+              <design:displaySize>12</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>products_quantity</design:name>
+            <design:position>2</design:position>
+            <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
+            <design:precision>4</design:precision>
+            <design:scale>0</design:scale>
+            <design:nullability>NotNullable</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>products_quantity</design:label>
+            <design:formattingHints>
+              <design:displaySize>4</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>products_price</design:name>
+            <design:position>3</design:position>
+            <design:nativeDataTypeCode>3</design:nativeDataTypeCode>
+            <design:precision>15</design:precision>
+            <design:scale>4</design:scale>
+            <design:nullability>NotNullable</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>products_price</design:label>
+            <design:formattingHints>
+              <design:displaySize>17</design:displaySize>
+            </design:formattingHints>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+        </oda-data-set>
+    </data-sets>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <property name="type">a4</property>
+            <page-footer>
+                <grid id="3">
+                    <property name="width">100%</property>
+                    <column id="4"/>
+                    <row id="5">
+                        <cell id="6">
+                            <text id="7">
+                                <property name="borderTopColor">#000000</property>
+                                <property name="borderTopStyle">solid</property>
+                                <property name="borderTopWidth">thin</property>
+                                <property name="contentType">html</property>
+                                <text-property name="content"><![CDATA[<center>Top Product Sales - <value-of>new Date()</value-of> - Powered by KonaKart</center>]]></text-property>
+                            </text>
+                        </cell>
+                    </row>
+                </grid>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <grid id="8">
+            <property name="height">0.333in</property>
+            <property name="width">100%</property>
+            <column id="9"/>
+            <row id="10">
+                <property name="height">0.333in</property>
+                <property name="verticalAlign">text-bottom</property>
+                <cell id="11">
+                    <property name="borderTopColor">#000000</property>
+                    <property name="borderTopStyle">solid</property>
+                    <property name="borderTopWidth">thin</property>
+                    <property name="verticalAlign">top</property>
+                    <label id="12">
+                        <property name="fontFamily">sans-serif</property>
+                        <property name="fontWeight">bold</property>
+                        <property name="textUnderline">underline</property>
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Top Product Sales</text-property>
+                    </label>
+                </cell>
+            </row>
+        </grid>
+        <table name="HiddenCurrencyData" id="107">
+            <property name="width">100%</property>
+            <property name="dataSet">konakart.CurrencyFormatter</property>
+            <list-property name="visibility">
+                <structure>
+                    <property name="format">all</property>
+                    <expression name="valueExpr">true</expression>
+                </structure>
+            </list-property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">symbol_left</property>
+                    <expression name="expression">dataSetRow["SYMBOL_LEFT"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">symbol_right</property>
+                    <expression name="expression">dataSetRow["SYMBOL_RIGHT"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">decimal_point</property>
+                    <expression name="expression">dataSetRow["DECIMAL_POINT"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">thousands_point</property>
+                    <expression name="expression">dataSetRow["THOUSANDS_POINT"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">decimal_places</property>
+                    <expression name="expression">dataSetRow["DECIMAL_PLACES"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <property name="pageBreakInterval">50</property>
+            <column id="136"/>
+            <column id="137"/>
+            <column id="138"/>
+            <column id="139"/>
+            <column id="140"/>
+            <detail>
+                <row id="119">
+                    <cell id="120">
+                        <data id="121">
+                            <property name="resultSetColumn">symbol_left</property>
+                        </data>
+                    </cell>
+                    <cell id="122">
+                        <data id="123">
+                            <property name="resultSetColumn">symbol_right</property>
+                        </data>
+                    </cell>
+                    <cell id="124">
+                        <data id="125">
+                            <property name="resultSetColumn">decimal_point</property>
+                        </data>
+                    </cell>
+                    <cell id="126">
+                        <data id="127">
+                            <property name="resultSetColumn">thousands_point</property>
+                        </data>
+                    </cell>
+                    <cell id="128">
+                        <data id="129">
+                            <property name="resultSetColumn">decimal_places</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+        <table name="ProductTable" id="13">
+            <property name="style">konakart-list-table</property>
+            <property name="marginBottom">10pt</property>
+            <property name="width">100%</property>
+            <property name="dataSet">TopProductSales</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">products_model</property>
+                    <expression name="expression">dataSetRow["PRODUCTS_MODEL"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">Total_Quantity</property>
+                    <expression name="expression">dataSetRow["TOTQTY"]</expression>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="name">products_name</property>
+                    <expression name="expression">dataSetRow["PRODUCTS_NAME"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <property name="pageBreakInterval">50</property>
+            <column id="103">
+                <property name="width">30%</property>
+            </column>
+            <column id="35">
+                <property name="width">30%</property>
+            </column>
+            <column id="36">
+                <property name="width">20%</property>
+            </column>
+            <header>
+                <row id="14">
+                    <property name="backgroundColor">#FFFFFF</property>
+                    <property name="fontFamily">sans-serif</property>
+                    <cell id="100">
+                        <property name="fontSize">small</property>
+                        <label id="104">
+                            <property name="style">konakart-column-heading-left</property>
+                            <text-property name="text">Name</text-property>
+                        </label>
+                    </cell>
+                    <cell id="15">
+                        <property name="fontSize">small</property>
+                        <label id="43">
+                            <property name="style">konakart-column-heading-left</property>
+                            <text-property name="text">Model</text-property>
+                        </label>
+                    </cell>
+                    <cell id="16">
+                        <label id="45">
+                            <property name="style">konakart-column-heading-center</property>
+                            <text-property name="text">Total Sales</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="27">
+                    <property name="backgroundColor">white</property>
+                    <cell id="101">
+                        <data id="105">
+                            <property name="style">konakart-table-data-left</property>
+                            <property name="resultSetColumn">products_name</property>
+                        </data>
+                    </cell>
+                    <cell id="28">
+                        <data id="44">
+                            <property name="style">konakart-table-data-left</property>
+                            <property name="resultSetColumn">products_model</property>
+                        </data>
+                    </cell>
+                    <cell id="29">
+                        <data id="46">
+                            <property name="style">konakart-table-data-center</property>
+                            <property name="resultSetColumn">Total_Quantity</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+            <footer>
+                <row id="49">
+                    <property name="backgroundColor">#FFFFFF</property>
+                    <property name="color">#000000</property>
+                    <cell id="102"/>
+                    <cell id="50"/>
+                    <cell id="51"/>
+                </row>
+            </footer>
+        </table>
+    </body>
+</report>

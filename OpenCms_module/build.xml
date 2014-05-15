@@ -1,0 +1,93 @@
+<project name="OpenCmsModule" default="build" basedir=".">
+
+	<!-- === PROPERTIES === -->
+	<property environment="env" />
+
+	<!-- build.local.properties will override the build.properties file if present -->
+	<property file="build.local.properties" />
+	<property file="build.properties" />
+
+	<!-- Set java.source if it hasn't already been defined -->
+	<condition property="java.source" value="1.6">
+		<not>
+			<isset property="java.source" />
+		</not>
+	</condition>
+
+	<!-- Set java.target if it hasn't already been defined -->
+	<condition property="java.target" value="1.6">
+		<not>
+			<isset property="java.target" />
+		</not>
+	</condition>
+	
+	<path id="axis.path">
+        <fileset dir="../java_soap_examples/lib/" />
+	</path>
+
+	<path id="compile.path">
+		<path refid="axis.path" />
+	</path>
+
+	<target name="clean"
+	        description="Clears away everything that's created during a build">
+
+		<echo message="Clean the OpenCms_module..." />
+		<delete includeEmptyDirs="true" failonerror="false" >
+			<fileset dir="./jar" />
+			<fileset dir="./classes" />
+			<fileset dir="./gensrc/com/konakart/ws" />
+			<fileset dir="./gensrc/com/konakart/app" />
+			<fileset dir="./gensrc/com/konakart/wsapp" />
+		</delete>
+	</target>
+
+	<target name="axis_client_generation"
+	        description="Generate client stubs from the WSDL">
+
+		<echo message="Create the KonaKart client stubs from the WSDL" />
+		<java classname="org.apache.axis.wsdl.WSDL2Java"
+		      fork="true"
+		      failonerror="true">
+			<arg value="-o" />
+			<arg value="./gensrc/" />
+			<arg value="./konakart.wsdl" />
+			<classpath refid="axis.path" />
+		</java>
+	</target>
+
+	<target name="compile" description="Compile the examples">
+		<echo message="Compile the examples" />
+
+		<mkdir dir="./classes" />
+		<javac srcdir="./src/:./gensrc/"
+		       destdir="./classes"
+		       debug="off"
+		       fork="yes"
+		       source="${java.source}"
+		       target="${java.target}"
+		       includes="**/*.java">
+			<classpath refid="compile.path" />
+		</javac>
+	</target>
+
+	<target name="make_jar" description="Create the jar needed by OpenCms">
+		<echo message="Create the jar needed by OpenCMS" />
+		<mkdir dir="./jar"/>
+		<jar destfile="./jar/konakart-opencms.jar"
+			   basedir="./classes"
+        />
+		<echo message="./jar/konakart-opencms.jar Created - copy to the OpenCms webapp" />
+	</target>
+
+	<target name="build"
+	        description="Creates the SOAP proxy classes then builds the OpenCms jar"
+	        depends="
+					clean,
+					axis_client_generation,
+                    compile,
+                    make_jar
+		    		"
+	/>
+
+</project>

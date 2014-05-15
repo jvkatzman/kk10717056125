@@ -1,0 +1,28 @@
+Dec 3, 2013 7:22:14 PM org.apache.catalina.core.StandardContext filterStart
+SEVERE: Exception starting filter SolrRequestFilter
+org.apache.solr.common.SolrException: Could not find necessary SLF4j logging jars. If using Jetty, the SLF4j logging jars need to go in the jetty lib/ext directory. For other containers, the corresponding directory should be used. For more information, see: http://wiki.apache.org/solr/SolrLogging
+	at org.apache.solr.servlet.SolrDispatchFilter.<init>(SolrDispatchFilter.java:111)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:534)
+	at java.lang.Class.newInstance(Class.java:374)
+	at org.apache.catalina.core.DefaultInstanceManager.newInstance(DefaultInstanceManager.java:127)
+	at org.apache.catalina.core.ApplicationFilterConfig.getFilter(ApplicationFilterConfig.java:252)
+	at org.apache.catalina.core.ApplicationFilterConfig.setFilterDef(ApplicationFilterConfig.java:372)
+	at org.apache.catalina.core.ApplicationFilterConfig.<init>(ApplicationFilterConfig.java:98)
+	at org.apache.catalina.core.StandardContext.filterStart(StandardContext.java:4584)
+	at org.apache.catalina.core.StandardContext$2.call(StandardContext.java:5262)
+	at org.apache.catalina.core.StandardContext$2.call(StandardContext.java:5257)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1146)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:701)
+Caused by: java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+	at org.apache.solr.servlet.SolrDispatchFilter.<init>(SolrDispatchFilter.java:109)
+	... 17 more
+Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+	at org.apache.catalina.loader.WebappClassLoader.loadClass(WebappClassLoader.java:1678)
+	at org.apache.catalina.loader.WebappClassLoader.loadClass(WebappClassLoader.java:1523)
+	... 18 more

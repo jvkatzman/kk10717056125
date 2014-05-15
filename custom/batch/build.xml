@@ -1,0 +1,105 @@
+<project name="konakartadmin_batch_build" default="build" basedir=".">
+
+	<!-- === PROPERTIES === -->
+	<property environment="env" />
+
+	<!-- build.local.properties will override the build.properties file if present -->
+	<property file="build.local.properties" />
+	<property file="build.properties" />
+
+		<!-- Set java.source if it hasn't already been defined -->
+	<condition property="java.source" value="1.6">
+		<not>
+			<isset property="java.source" />
+		</not>
+	</condition>
+
+	<!-- Set java.target if it hasn't already been defined -->
+	<condition property="java.target" value="1.6">
+		<not>
+			<isset property="java.target" />
+		</not>
+	</condition>
+
+	<dirname property="custom.batch.home" file="${ant.file}" />
+	<property name="konakart.home" value="${custom.batch.home}/../../" />
+	<property name="konakartadmin.dir" value="${konakart.home}/webapps/konakartadmin/" />
+	<property name="konakartadmin.lib" value="${konakart.home}/webapps/konakartadmin/WEB-INF/lib/" />
+	
+	<!-- Set the JAVAC_DEBUG - if JAVAC_DEBUG has been defined -->
+	<condition property="debug_javac" value="${env.JAVAC_DEBUG}">
+		<isset property="env.JAVAC_DEBUG" />
+	</condition>
+	<!-- Set the default, which is off - if JAVAC_DEBUG hasn't been defined -->
+	<condition property="debug_javac" value="off">
+		<not>
+			<isset property="env.JAVAC_DEBUG" />
+		</not>
+	</condition>
+
+	<path id="kklibs.path">
+		<fileset dir="${konakartadmin.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="compile.path">
+		<pathelement location="${custom.batch.home}/classes" />
+		<path refid="kklibs.path" />
+	</path>
+
+	<target name="clean"
+	        description="Clears away everything that's created during a build">
+
+		<echo message="Cleanup..." />
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${custom.batch.home}/classes" />
+		</delete>
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${custom.batch.home}/jar" />
+		</delete>
+	</target>
+
+	<target name="compile" description="Compile the batch sources">
+		<echo message="Compile the batch sources" />
+
+		<mkdir dir="${custom.batch.home}/classes" />
+		<javac srcdir="${custom.batch.home}/src/"
+		       destdir="${custom.batch.home}/classes"
+		       debug="${debug_javac}"
+		       fork="yes"
+		       source="${java.source}"
+		       target="${java.target}"
+		       includes="**/*.java">
+			<classpath refid="compile.path" />
+		</javac>
+	</target>
+
+	<target name="make_batch_jar" description="Create the batch jar">
+		<echo message="Create the batch jar" />
+		
+		<mkdir dir="${custom.batch.home}/jar" />
+		<jar destfile="${custom.batch.home}/jar/konakartadmin_batch.jar"
+			manifest="${custom.batch.home}/../MANIFEST.MF" >
+			<fileset dir="${custom.batch.home}/classes" />
+			<fileset dir="${konakart.home}/licences">
+				<include name="ENTERPRISE-LICENSE.txt" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="copy_jars" description="Copy the batch jar to the lib directory">
+		<echo message="Copy the batch jar to the lib directory" />
+		<copy todir="${konakartadmin.lib}">
+			<fileset dir="${custom.batch.home}/jar/" />
+		</copy>
+	</target>
+
+	<target name="build"
+	        description="Compiles the batch code and creates the jar"
+	        depends="
+			clean,
+			compile,
+			make_batch_jar
+		" />
+</project>

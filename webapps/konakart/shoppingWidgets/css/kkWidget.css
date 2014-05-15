@@ -1,0 +1,135 @@
+.kk-prod  {
+	display: block;
+	font-size:70%;
+	background-color: inherit;
+}
+
+.kk-tabs  {
+	width: 320px;
+	height: 360px;
+}
+
+.kk-img-content  {
+	text-align: center;
+	background-color: inherit;
+	color: inherit;
+}
+
+.kk-small-img {
+	width: 40px;
+	height: 32px;
+	margin: 5px;
+}
+
+/* Remove image link border in IE */
+a .kk-small-img {
+	border: none; 
+}
+
+.kk-large-img  {
+	width: 250px;
+	height: 200px;
+}
+
+.kk-prod-name  {
+	font-weight: bold;
+	font-size:100%;
+}
+
+.kk-prod-price  {
+	font-weight: bold;
+    font-size:120%;
+	color: inherit;
+	text-align: center;
+	padding: 0px 3px 0px 3px;
+}
+
+.kk-add-to-cart-button {
+	white-space:nowrap;
+}
+
+.kk-add-to-cart-footer {
+	border:1px solid gray;
+    background-color: inherit;
+	color: inherit;
+	font-size: 1em; /* Inherit doesn't work for IE */
+	margin: 5px 0px 5px 0px;
+	width: 100%;
+}
+
+.kk-cart-content {
+	border:1px solid gray;
+	background-color: inherit;
+	color: inherit;
+	font-size: 1em;
+	padding: 5px 3px 5px 3px;
+	margin: 5px 0px 5px 0px;
+	overflow:auto;
+	height: 150px;
+}
+
+.kk-cart-content-table {
+	background-color: inherit;
+	color: inherit;
+	font-size: 1em;
+}
+
+.kk-cart-order-totals {
+	border:1px solid gray;
+	background-color: inherit;
+	color: inherit;
+	font-size: 1em;
+	padding: 5px 3px 5px 3px;
+	margin: 5px 0px 5px 0px;
+	overflow:auto;
+	height: 60px;
+}
+
+.kk-cart-order-totals-table {
+	background-color: inherit;
+	color: inherit;
+	font-size: 1em;
+}
+
+.kk-cart-total  {
+	border:1px solid gray;
+    background-color: inherit;
+	color: inherit;
+	font-size: inherit;
+	padding: 5px 3px 5px 3px;
+	margin: 5px 0px 5px 0px;
+	width: 100%;
+}
+
+.kk-cart-product-name  {
+	font-size: 85%;
+}
+.kk-cart-option-name  {
+	font-size: 70%;
+}
+
+.kk-detail-content {
+	height: 240px;
+	overflow:auto;
+	margin: 0px 0px 15px 0px;
+}
+
+.kk-reviews-content {
+	height: 240px;
+	overflow:auto;
+	margin: 0px 0px 15px 0px;
+}
+
+.kk-review-header {
+	border: 1px solid gray;
+	padding: 2px 5px 2px 5px;
+	margin: 10px 0px 0px 0px;
+	
+}
+
+
+
+
+
+
+

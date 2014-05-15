@@ -1,0 +1,18 @@
+Release notes
+=============
+
+Please check the CHANGES.txt file for changes in this release.
+
+Release Notes for all releases are published on-line at:
+		http://www.konakart.com/downloads/release-notes
+
+Please check the Known Problems for this release at:
+        http://www.konakart.com/downloads/known-problems
+
+Please post any questions, bugs or suggestions to our forum at:
+        http://www.konakart.com/forum
+
+_______________________________________________________________________________________
+www:    http://www.konakart.com
+forum:  http://www.konakart.com/forum
+email:  support@konakart.com (for customers with support contracts)

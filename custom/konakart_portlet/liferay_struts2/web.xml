@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>KonaKart Storefront Portlet</display-name>
+	
+	<context-param>
+		<param-name>org.apache.tiles.impl.BasicTilesContainer.DEFINITIONS_CONFIG</param-name>
+		<param-value>/WEB-INF/tiles.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.apache.tiles.factory.TilesContainerFactory</param-name>
+		<param-value>org.apache.struts2.tiles.StrutsTilesContainerFactory</param-value>
+	</context-param>
+
+	<!-- Start - Added as an Experiment by John 
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	 End - Added as an Experiment by John -->
+	
+	<listener>
+		<listener-class>org.apache.struts2.tiles.StrutsTilesListener</listener-class>
+	</listener>
+    
+	<!-- Used to listen out for Shutdown messages and handle the Shutdown of threads -->
+	<listener>
+		<listener-class>
+			com.konakart.bl.KKServletContextListener
+		</listener-class>
+	</listener>
+
+		<!-- Start a KKAppEngine -->
+	<servlet>
+		<description>KonaKart Client Engine Servlet</description>
+		<servlet-name>KonaKartAppEngineServlet</servlet-name>
+		<servlet-class>com.konakart.servlet.AppEngServlet</servlet-class>
+		<init-param>
+			<param-name>propertiesPath</param-name>
+			<param-value>konakart.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>appPropertiesPath</param-name>
+			<param-value>konakart_app.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>mode</param-name>
+			<param-value>0</param-value>
+		</init-param>
+		<init-param>
+			<param-name>storeId</param-name>
+			<param-value>store1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>customersShared</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>productsShared</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>categoriesShared</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>defaultStoreId</param-name>
+			<param-value>store1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>portlet</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+</web-app>

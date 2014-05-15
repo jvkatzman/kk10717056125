@@ -1,0 +1,302 @@
+KonaKart Web Services Security
+==============================
+
+This is configurable entirely by the customer.  A wide variety of security types are supported by
+Axis just by configuring the handlers.
+
+See http://ws.apache.org/wss4j/ for details.
+
+The implementation is purely in the AXIS handler chains and does not affect the KonaKart services at all.
+
+An example on Windows of bi-directional signed and encrypted messaging is explained below:
+
+
+Example of implementing WS-Security with KonaKart
+-------------------------------------------------
+
+1) Create the keys
+
+Execute these statements to create the keys and keystore:
+
+(A batch file containing these commands is provided at KonaKart\java_soap_examples\makeKeys.bat)
+
+@echo off
+
+rem
+rem delete the files created by these commands in case it's being run a second time
+rem
+
+if exist konakeystore    del konakeystore
+if exist pubkeystore     del pubkeystore
+if exist pubcert         del pubcert
+
+rem
+rem An example showing how to make the keys required to run the WS-Security Example
+rem
+
+echo.
+echo Generate a key-pair to use as a certificate/public-key:
+
+%JAVA_HOME%\bin\keytool -keyalg RSA -keysize 1024 -genkey -alias konakey -keystore konakeystore -dname "cn=konakey" -keypass SecretPassword -storepass SecretPassword
+
+echo.
+echo Self-sign the certificate (OK for testing only):
+
+%JAVA_HOME%\bin\keytool -selfcert -alias konakey -keystore konakeystore -keypass SecretPassword -storepass SecretPassword
+
+echo.
+echo Export the public key to a certificate file:
+
+%JAVA_HOME%\bin\keytool -export -keystore konakeystore -alias konakey -storepass SecretPassword -file pubcert
+
+echo.
+echo The public certificate:
+
+%JAVA_HOME%\bin\keytool -printcert -file pubcert
+   
+echo.
+echo Import the public certificate of the private key into the konakeystore:
+
+%JAVA_HOME%\bin\keytool -import -alias pubcert -file pubcert -keystore pubkeystore -storepass SecretPassword -noprompt
+ 
+echo.
+echo konakeystore now contains:
+
+%JAVA_HOME%\bin\keytool -list -keystore konakeystore -storepass SecretPassword
+
+echo.
+echo pubkeystore now contains:
+
+%JAVA_HOME%\bin\keytool -list -keystore pubkeystore -storepass SecretPassword
+
+echo.
+
+
+2) Download the WSS4J jars
+
+Download these jars from http://ws.apache.org/wss4j/#Where_can_I_download_WSS4J
+
+
+3) Place jars in client and server
+
+For the example client add the jars to KonaKart\java_soap_examples\lib
+For the KonaKart server add the jars to KonaKart\webapps\konakart\WEB-INF\lib
+
+These are the only jars required for the example:
+	wss4j-1.5.5.jar
+	xmlsec-1.4.2.jar	
+	bcprov-jdk14-140.jar
+	xalan-2.7.1.jar
+
+	
+4) Modify classpath for the client
+
+Modify the ANT build file (KonaKart\java_soap_examples\build.xml) to include the new jars on the classpath:
+
+	<path id="axis.path">
+		<pathelement location="./lib/axis.jar" />
+		<pathelement location="./lib/axis-ant.jar" />
+		<pathelement location="./lib/axis-schema.jar" />
+		<pathelement location="./lib/commons-discovery-0.2.jar" />
+		<pathelement location="./lib/commons-logging-1.0.4.jar" />
+		<pathelement location="./lib/jaxrpc.jar" />
+		<pathelement location="./lib/log4j-1.2.12.jar" />
+		<pathelement location="./lib/saaj.jar" />
+		<pathelement location="./lib/wsdl4j-1.5.1.jar" />
+		<pathelement location="./lib/activation.jar" />
+		<pathelement location="./lib/mail.jar" />
+		
+		<pathelement location="./lib/wss4j-1.5.5.jar" />
+		<pathelement location="./lib/xmlsec-1.4.2.jar" />
+		<pathelement location="./lib/bcprov-jdk14-140.jar" />
+		<pathelement location="./lib/xalan-2.7.1.jar" />
+	</path>
+	
+Also, if this is not already present, add this path definition just below the run.path definition in the same ANT build.xml file:
+		
+	<path id="secure.run.path">
+		<path location="./src" />
+		<path refid="run.path" />
+	</path>
+
+	
+5) Add a new ANT target for running the WS-Security example
+
+If not already present, add the following ANT target to the ANT build file (KonaKart\java_soap_examples\build.xml):
+
+	<target name="run.secure" description="Run the little example program using ws-secure client">	
+		<java classname="com.konakart.AxisExample"
+		      fork="true"
+		      failonerror="true">
+			<classpath refid="secure.run.path" />
+			<jvmarg value="-Daxis.ClientConfigFile=./src/client-config.wsdd" />
+		</java>
+	</target>
+
+	
+6) Create a new client-config.wsdd file
+
+If not already present, create a KonaKart\java_soap_examples\src\client-config.wsdd file with the following contents:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<globalConfiguration>
+
+		<!-- Encrypt and Sign the request message -->
+		<requestFlow>
+			<handler name="DoSecuritySender" type="java:org.apache.ws.axis.security.WSDoAllSender" >
+				<parameter name="user" value="konakey"/>
+				<parameter name="passwordCallbackClass" value="org.apache.ws.axis.oasis.PWCallback"/>
+				<parameter name="action" value="Encrypt Signature"/>
+				<parameter name="signaturePropFile" value="kk.client.crypto.properties" />
+			</handler>
+		</requestFlow>
+	  
+		<!-- We need to Validate the signature and decrypt the response message -->
+		<responseFlow>
+			<handler name="DoSecurityReceiver" type="java:org.apache.ws.axis.security.WSDoAllReceiver">
+				<parameter name="passwordCallbackClass" value="org.apache.ws.axis.oasis.PWCallback"/> 
+				<parameter name="action" value="Encrypt Signature"/>
+				<parameter name="signaturePropFile" value="kk.client.crypto.properties" />
+			</handler>
+		</responseFlow>
+ 
+	</globalConfiguration>
+ 
+	<transport name="java" pivot="java:org.apache.axis.transport.java.JavaSender"/>
+	<transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
+	<transport name="local" pivot="java:org.apache.axis.transport.local.LocalSender"/>
+ 
+</deployment>
+	
+	
+7) Update the server-config.wsdd file
+
+Add the following lines to the KonaKart\webapps\konakart\WEB-INF\server-config.wsdd file:
+
+<transport name="http">
+	<requestFlow>
+		<handler type="URLMapper"/>
+		<handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+
+		<!-- We need to Validate the signature and decrypt the request message -->
+		<handler type="java:org.apache.ws.axis.security.WSDoAllReceiver" >
+			<parameter name="passwordCallbackClass" value="org.apache.ws.axis.oasis.PWCallback"/>
+			<parameter name="action" value="Encrypt Signature"/>
+			<parameter name="signaturePropFile" value="kk.server.crypto.properties" />
+		</handler>
+	</requestFlow>
+
+	<!-- Encrypt and Sign the response message -->
+	<responseFlow>
+		<handler type="java:org.apache.ws.axis.security.WSDoAllSender" >
+			<parameter name="user" value="konakey"/>
+			<parameter name="passwordCallbackClass" value="org.apache.ws.axis.oasis.PWCallback"/>
+			<parameter name="action" value="Encrypt Signature"/>
+			<parameter name="signaturePropFile" value="kk.server.crypto.properties" />
+		</handler>
+	</responseFlow>
+</transport>
+
+
+8) Crypto file
+
+Add two new crypto properties files.   These are named above in the client-config.wsdd and server-config.wsdd files respectively.  These kk.crypto.properties files should be placed on the classpath of client and server respectively.
+
+The client kk.client.crypto.properties file (place in KonaKart\java_soap_examples\src) should contain:
+
+org.apache.ws.security.crypto.provider=org.apache.ws.security.components.crypto.Merlin
+org.apache.ws.security.crypto.merlin.keystore.type=jks
+org.apache.ws.security.crypto.merlin.keystore.password=SecretPassword
+org.apache.ws.security.crypto.merlin.keystore.alias=konakey
+org.apache.ws.security.crypto.merlin.alias.password=SecretPassword
+org.apache.ws.security.crypto.merlin.file=konakeystore
+
+
+The server kk.server.crypto.properties file (place in KonaKart\webapps\konakart\WEB-INF\classes) should contain:
+
+org.apache.ws.security.crypto.provider=org.apache.ws.security.components.crypto.Merlin
+org.apache.ws.security.crypto.merlin.keystore.type=jks
+org.apache.ws.security.crypto.merlin.keystore.password=SecretPassword
+org.apache.ws.security.crypto.merlin.keystore.alias=konakey
+org.apache.ws.security.crypto.merlin.alias.password=SecretPassword
+org.apache.ws.security.crypto.merlin.file=C:/Program Files/KonaKart/java_soap_examples/konakeystore
+
+
+9) Create the password callback 
+
+Create a java program at KonaKart\java_soap_examples\src\org\apache\ws\axis\oasis called PWCallback.java that contains:
+
+package org.apache.ws.axis.oasis;
+
+import org.apache.ws.security.WSPasswordCallback;
+
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import java.io.IOException;
+
+public class PWCallback implements CallbackHandler {
+
+    /* (non-Javadoc)
+     * @see javax.security.auth.callback.CallbackHandler#handle(javax.security.auth.callback.Callback[])
+     */
+    public void handle(Callback[] callbacks)
+        throws IOException, UnsupportedCallbackException {
+        for (int i = 0; i < callbacks.length; i++) {
+            if (callbacks[i] instanceof WSPasswordCallback) {
+                WSPasswordCallback pc = (WSPasswordCallback) callbacks[i];
+                /*
+                 * here call a function/method to lookup the password for
+                 * the given identifier (e.g. a user name or keystore alias)
+                 * e.g.: pc.setPassword(passStore.getPassword(pc.getIdentfifier))
+                 * for Testing we supply a fixed name here.
+                 */
+                pc.setPassword("SecretPassword");
+            } else {
+                throw new UnsupportedCallbackException(
+                    callbacks[i],
+                    "Unrecognized Callback");
+            }
+        }
+    }
+}
+
+
+10) Compile the password callback
+
+The easiest way is to use:
+
+KonaKart\java_soap_examples\>   ant compile
+
+
+11) Move password callback class to server
+
+After you have compiled the password callback in KonaKart\java_soap_examples\src\org\apache\ws\axis\oasis your resulting class file is created in KonaKart\java_soap_examples\classes\org\apache\ws\axis\oasis\.   This location is correct for the client (it is on the classpath defined in the ANT build file for running the example) but not for the server, hence:
+
+Copy the password callback class file (including the directory structure) into KonaKart\webapps\konakart\WEB-INF\classes
+
+For example:
+
+KonaKart\java_soap_examples\>   xcopy classes\org /E /Y ..\webapps\konakart\WEB-INF\classes\org\
+
+
+12) Run the example
+
+KonaKart\java_soap_examples\>   ant run.secure
+
+
+
+Miscellaneous Notes:
+--------------------
+
+For debugging add these log4j settings (adjust as necessary):
+
+log4j.logger.org.apache.axis                  = INFO
+log4j.logger.org.apache.ws.axis               = DEBUG
+log4j.logger.org.apache.ws.security           = INFO
+
+
+Many different variants of secure messaging are supported by AXIS;  the example is just to show how it can be achieved.
+
+Note that the example is not ready for production use, it's just an example!  Amongst other weaknesses, your implementation of the password callback should be rather more sophisticated than the one provided which simply returns a fixed String and your certificates should not be self-signed.

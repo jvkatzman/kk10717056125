@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.1
+Created-By: 20.4-b02 (Sun Microsystems Inc.)
+
+Name: KonaKart
+Implementation-Vendor: DS Data Systems (UK) Ltd.
+Implementation-Title: KonaKart
+Implementation-Version: 7.1.1.1-10247
+Build-Date: 5:53AM 12-Sep-2013 BST
+Build-Host: villa
+Java-Debug: off
+

@@ -1,0 +1,3276 @@
+Changes with KonaKart 7.1.1.1 - Released 12-Sep-2013
+====================================================
+  
+  *) None
+  
+Bug Fixes
+---------
+
+  *) Important Security Fix Resolved in Struts 2.3.8.  
+     See http://www.cvedetails.com/cve/CVE-2013-2251/
+  
+Backwards Compatibility Alert
+-----------------------------
+
+  *) None
+
+
+Changes with KonaKart 7.1.1.0 - Released 05-Sep-2013
+====================================================
+  
+  *) Added search by manufacturer ascending and descending in order to search for 
+     products using the Application and Admin engines. Previously only 
+     ascending was available.
+  
+  *) Added new method getBundlesThatProductsBelongTo() to return an array of bundles plus
+     bundled products for an array of products passed in as a parameter. Allows you 
+     to determine (and fetch) the bundles that contain all of the specified products.
+
+  *) Added a mechanism to optionally include the template name in the product custom 
+     attribute labels in the Edit Product panel of the Admin App. Also, the
+     custom fields may be grouped into a collapsable panel for each template.
+
+  *) Updated the Administration Application's StyleSheet used when deployed as a portlet
+     under Liferay.
+
+  *) Removed the Cookie Warning from the Storefront Application when deployed as a portlet
+     under Liferay.
+
+  *) Set more fields for the new KonaKart user that is created when automatically logged on from
+     Liferay.  eg. Use the country of the store.  This can be customised as required as the 
+     KKAdminPortlet.java file is provided as source code.
+
+  *) New getProductImages API call for the storefront engine (KKEngIf) - can be used to 
+     retrieve the names of images associated with a specified product.
+
+  *) Ehcache introduced for faster access to image names associated with products.
+  
+  *) More flexible image scaling can be configured when uploading product images. Notably,
+     aspect ratios can be retained.
+
+Bug Fixes
+---------
+
+  *) Fixed a bug whereby in multi-store mode, the related products within carousels
+     in the product detail page of the storefront app, were sometimes not picking up
+     the correct currency.
+ 
+  *) Fixed a storefront bug which was causing the customer to redirect to the checkout
+     page when changing the country during an edit address and then clicking the back
+     button rather than the save button.
+
+  *) Fixed a suggested search problem to unescape HTML returned by Solr. The indexing
+     of ampersand was causing the problem since Solr was returning &amp; in the 
+     suggested search results.
+
+  *) Added a '/' before KonakartAdmin.css in the liferay-portlet.xml to ensure the style
+     sheet file is found on all Liferay platforms.
+  
+  *) Fixed a bug in the admin app to allow an administrator to register a customer 
+     if the email address aready exists in the database for a non registered customer.
+     The admin engine was allowing the registration but wasn't deleting the non 
+     registered customer.
+
+  *) Fixed a storefront bug that was causing an error when checking out as a non 
+     registered customer and clicking the order confirmation breadcrumb. 
+  
+  *) Fixed a storefront bug that was causing a null pointer error when paging a set 
+     of products containing a product in multiple categories where a category is 
+     invisible and solr is enabled
+  
+Backwards Compatibility Alert
+-----------------------------
+
+  *) 
+
+
+Changes with KonaKart 7.1.0.0 - Released 08-Aug-2013
+====================================================
+  
+  *) Multi-Vendor functionality allowing vendors to manage their own products and orders
+     and customers to buy products from multiple vendors in a single order.
+  
+  *) New panel in the Admin App allowing you to maintain your store's Velocity Templates.
+
+  *) New functionality allowing you to associate stores with addresses. 
+
+  *) Add vertical scrollbars to panels when there is a large number of data rows to 
+     display (such as in View Logs, Importer, Templates panels etc).
+
+  *) A number of template changes to modify the output according to the setting of the 
+     "DISPLAY_PRICE_WITH_TAX" configuration variable.
+
+  *) Significant improvements in performance for the import messages API call.
+  
+  *) Ability to configure personal preferences in the Admin App (eg. to define the number 
+     of products returned in each group on the Products Panel).
+
+  *) Additions to the Data Integrity Checker to include checks for Product, Category
+     and Manufacturer data.
+
+  *) Made AdminStoreIntegrationMgr.java available in the custom directory to make it 
+     easier to add and build custom functionality when new stores are created in a 
+     multi-store environment. 
+
+  *) Increased the maximum number of Payment Schedule objects visible in the drop lists
+     in the EditProduct and Subscription panels from 100 to 1000.  
+
+  *) Upgraded to BIRT 4.3.0
+  
+  *) Added a new option to the FetchProductOptions object in the Application API to
+     programmably allow returned products to be populated with tags. Normally for
+     performance reasons they are only populated when retrieving a single product.
+
+  *) More flexibility in uploading images in different formats in the Administration
+     Application.  See FBC (File-Based Configuration for details).
+
+  *) Added section to storefront application to prompt customer to accept cookies.  
+  
+  *) The storefront application can now be configured to force a customer to login in
+     order to use it.
+
+Bug Fixes
+---------
+
+  *) Various configuration parameters were not set corrected when using the silent 
+     installation and specifying a target installation directory containing a "~" on
+     Windows.
+
+  *) Allow the saving of Manufacturer details after a new language has been added in 
+     the Admin Application.
+  
+  *) Customers/Products/Categories shared attributes not being set properly by the 
+     installer for the konakart-m webappp.
+
+  *) Added a "--None--" option for tax class droplists in the Admin App to accurately
+     reflect the status of the tax class.  
+
+  *) Shipping wasn't being recalculated when the delivery address was changed from 
+     the order confirmation page.
+  
+  *) Some security improvements in the storefront application.
+  
+  *) Modified storefront and mobile storefront applications to avoid (in some cases) 
+     the SEO modified URL from continually growing in size rather than being reset 
+     to display only the current relevant SEO data.
+	 
+  *) Modified Solr product loading code to not throw an exception if a product 
+     description exists for a language that has been deleted.
+  
+Backwards Compatibility Alert
+-----------------------------
+
+  *) AdminStoreIntegrationMgrInterface.java has been moved to the blif directory. If you 
+     have created your own AdminStoreIntegrationMgr.java class you need to change it
+     to implement com.konakartadmin.blif.AdminStoreIntegrationMgrInterface instead of 
+     com.konakartadmin.bl.AdminStoreIntegrationMgrInterface.
+
+
+Changes with KonaKart 7.0.0.0 - Released 12-Jun-2013
+====================================================
+  
+  *) CKEditor 4.1 integrated in the Enterprise version of the Admin Application.  This provides
+     an alternative to the Plain Text and the Rich Text Editors.
+
+  *) Added new functionality that allows a product to be associated with multiple custom
+     attribute templates. This helps the re-use of templates between different product 
+     categories. 
+
+  *) Added new method getBundlesThatProductBelongsTo() to return an array of bundles plus
+     bundled products for any product passed in as a parameter. Allows you to determine
+     (and fetch) the bundles that contain a specified product.
+
+  *) Added a sitemap generation batch (EE only) that will generate an XML sitemap to 
+     inform search engines about pages that are available for crawling. The sitemap files
+     include links to all products, categories and static pages.
+
+  *) Added a new Importer Panel for custom import routines. See User Guide for details.
+
+  *) Added a new Reset Database tool to clear out all non-essential data (for example to 
+     remove all the sample product data).  Use with care!.   The Reset Database option on
+     the Tools menu of the Admin App can be replaced by any custom Tool that you wish to
+     configure it its place.  See User Guide for details.
+
+ 
+Bug Fixes
+---------
+
+  *) Aligned the Configuration variables between the sample "store2" store and "store1".
+     (Display the Configuration variables in the same panels in each store).
+  
+  *) Fixed a storefront bug in Internet Explorer. When a product was added to the cart a 
+     second time from the product details screen, it wasn't working because IE wasn't sending 
+     the AJAX command since it had cached the original result.
+
+  *) Price slider and price facets were not displaying the price correctly when KonaKart
+     was configured to display product prices including tax.
+ 
+  *) Order total in order confirmation screen was not being displayed in the correct currency
+     when not using the default currency.
+
+  
+Backwards Compatibility Alert
+-----------------------------
+
+  *) 
+
+ 
+Changes with KonaKart 6.6.0.0 - Released 04-May-2013
+====================================================
+  
+  *) Storefront application for mobile devices. The storefront has been designed for 
+     customers using mobile phones and tablet computers. It allows you to access all
+     of the functionality using touch rather than by use of the mouse.
+  
+  *) Now possible to create a portlet for Liferay based on the new Struts-2 version.
+  
+  *) Allow case insensitive searches on a selection of fields on customer and product
+     from the Admin Application and by using the KKAdminIf API. This is useful if you're 
+     using a database like PostgreSQL, Oracle or DB2 which by default use case sensitive 
+     searches.  For the Admin App the field-by-field behaviour can be configured using
+     File-Based Configuration (Enterprise Only).
+ 
+  *) Using role-based configuration it is now possible to make the "custom" button on
+     the customers panel invisible for certain users but visible for others.
+
+  *) New Scheduler panel in the Administration Application for monitoring and executing
+     Batch jobs defined for the system.  A number of new Admin APIs have been added to
+     support this feature and also provide programmatic access to the batch jobs.
+
+  *) Upgrade to Struts 2.3.8
+  
+  *) Upgrade to Quartz 2.1.7
+
+  *) Added two extra custom fields to custom attribute descriptors.
+
+  *) Upgraded the Admin Application to use Google Web Toolkit 2.5.1
+  
+  *) Added userId to the Audit panel to make it easier to find out which user was responsible
+     for each change.  User name and User email also added to the detail section for each
+     audit record display.
+
+  *) Integration of USPS address validation (Enterprise Only) and framework for adding other
+     address validation services.
+
+  *) Added 6 new custom fields to the products_description table.  This allows access to more
+     language-specific custom fields for more flexibility.  These can be edited in the KonaKart
+     Administration Application on the Edit Product Panel.
+
+  *) Added transient customObj attributes to CustomerIf and ProductIf for use in holding custom
+     objects on these key KonaKart objects.   Note that these are transient objects and will not
+     take part in standard KonaKart API operations.  A typical use would be to populate these
+     custom object attributes after the Product or Customer has been returned from a KonaKart 
+     API (this could be in a custom engine where you have created your own getProduct() or 
+     getCustomer() calls for example).
+
+  *) Added mechanism to validate that all required order total objects are present before allowing
+     checkout. It is mainly important for tax and shipping modules that interface with an external
+     service which may be down.
+
+  *) Added the ability to tail logs from the Admin App.
+
+ 
+Bug Fixes
+---------
+
+  *) Not picking up all of the access rights correctly on the Customers for Orders panel of 
+     the Admin App. This affected control over the reviews button and to allow the return of 
+     invisible customers.
+     
+  *) Fixed a storefront bug that was not allowing customers to register when in the mode that
+     allows customers to checkout without registration.
+
+  *) Race conditions at startup of the Admin App caused the image upload servlet URL definition 
+     not to be initialised in time for its use.  This has been fixed so that the definition of the
+     image upload servlet URL should always be initialised properly before use.
+
+  *) Filtering search results by price in the storefront application was only working correctly
+     when using the default currency.
+
+  *) Added missing classes into konakartadmin_gwt.jar to enable logging at the DEBUG level. The
+     missing classes were used in certain debug statements when the debug level was set to
+     DEBUG on log4j.logger.com.konakartadmin.server.
+  
+  *) Fixed a bug that prevented sendOrderConfirmationEmail1 from sending emails with invoices 
+     attached
+  
+  *) Fixed a bug when in multi store shared products mode. When a product was removed from a 
+     store but not deleted, the product count per manufacturer was still considering the removed 
+     product in the count.
+     This bug was only visible in the storefront when not using Solr. This bug was manifested when
+     calling the engine API calls : getManufacturersPerCategory() and getManufacturers();
+
+  
+Backwards Compatibility Alert
+-----------------------------
+
+  *) Definitions in AdminSearchRules.properties have been moved to the 
+     konakartadmin_gwt.properties file and are now pre-fixed by "sr.".  The original
+     AdminSearchRules.properties file has been removed.
+
+  *) If you used the getPdf(eng.getEngConf(), options) call on the AdminEngineMgrIf the template 
+     name used (when the options type was set to KKConstants.HTML_NAMED_TEMPLATE) was retrieved 
+     from options.getCustom1().  From version 6.6.0.0 the named template will be retrieved from the 
+     options.getTemplateName() attribute.
+
+ 
+Changes with KonaKart 6.5.1.0 - Released 05-Mar-2013
+====================================================
+
+  *) Upgrade the JDBC driver for MySQL to support the new MySQL 5.6.10.1 release. Also in
+     connection with this, reduce the size of some key columns from VARCHAR(256) to 
+     VARCHAR(255) to avoid "Specified key was too long; max key length is 767 bytes" problems
+     when using UTF-8 encoding in the new version of MySQL.
+
+  *) Various UI changes to the storefront application:
+      -Made product tile clickable
+      -Increased size of product details image to stop truncation
+
+Bug Fixes
+---------
+
+  *) Fixed a UI bug appearing in Chrome. In some occasions when hovering over the Wish
+     link at the top of the page, the link would shift to the right and move the 
+     Shopping Cart link to the next line.  
+   
+  *) UI bug in checkout confirmation page. Product links are broken after page is refreshed 
+     using Ajax calls. e.g. change of shipping address. 
+     
+  *) UI bug in wish list page not displaying the total exclusive of tax.
+
+
+Changes with KonaKart 6.5.0.0 - Released 10-Feb-2013
+====================================================
+  
+  *) New storefront using struts2, JQuery and Ajax to give a more modern and functional
+     user interface with less screen refreshes. Enterprise customers now get the full 
+     source code of the client engine and an Eclipse project to easily customize all 
+     parts of the storefront application.
+
+  *) Implemented getPromotionResult() method for the FreeProduct promotion module so
+     that it can be determined whether the promotion is active before adding a 
+     product to the cart.
+ 
+  *) Allow embedded spaces with custom attribute "Set" function definitions - eg. allow
+     both string(1, 10) as well as string(1,10)
+
+  *) Addition of PunchOut functionality complying to OCI Rel. 4 using HTML rather than 
+     XML which was used for the previous implementation.
+
+  *) Upgraded to Apache Solr 4.0
+
+  *) Now allow 30 custom facet fields for Solr faceting instead of 10.
+
+  *) Multiple facet constraints can now be added to each TagGroup when performing
+     a faceted search with Solr.
+   
+  *) Added range facets for prices when using Solr.
+ 
+  *) All Solr searches now return the minimum and maximum prices for products in the
+     search results.
+ 
+  *) Added a new API call (getTagGroupsPerCategoryWithOptions) which allows the
+     fetching of tag groups without associated tags. The tags aren't required when
+     using Solr for faceted search so it improves performance to not retrieve them. 
+ 
+  *) Added attribute to ProductSearch object to force the use of Solr. 
+     Normally Solr is only used when doing text searches or when returning 
+     custom facets.
+
+  *) Added catalog prices and quantities to Solr so that Solr searches can 
+     be performed when using constraints on catalog prices and quantities. 
+
+  *) Modified Solr schema.xml to add SynonymFilterFactory to the kkName field type.
+
+  *) Modified the getManufacturersPerCategory() API call so that it returns the
+     product count for each manufacturer even when not using Solr.
+ 
+  *) Introduced a mechanism to easily allow a KonaKart customer to implement a 
+     different password encryption algorithm. By default KonaKart uses the 
+     MD5 Message-Digest Algorithm. The class that needs to be customized is 
+     called Security.java and can be found under 
+     KonaKart/custom/utils/src/com/konakart/util
+
+  *) Return the custom attribute template id for products retrieved using
+     the Application API.  
+
+  *) Allow Custom Validation of Tag names, Tag Group Names and Tag Group
+     Descriptions.  
+
+  *) Now possible to override the default file name for KonaKart's Velocity
+     properties file (default name is konakart_velocity.properties).  Also
+     possible, using this customisation technique (see "KonaKart Properties
+     Files" section in the User Guide) to specify different properties files
+     for different environments (Dev, Test, QA, Prod etc).
+
+  *) Introduced a getManufacturers API call to the storefront engine and 
+     enhanced the existing getManufacturers API call on the admin engine to
+     allow greater flexibility over searching for manufacturers - including 
+     the possibility to retrieve and order manufacturers by their custom fields.
+
+  *) Mask credit card numbers when written to the log in DEBUG mode (for
+     enhanced PCI compliance).  
+
+  *) Send additional parameters in PayPal module (first_name, last_name
+     address1, address2 city, state, country, postcode)
+
+  *) Added two new engine API calls ( addCustomerNotifications() and 
+     deleteCustomerNotifications() ) to manage the signing up for newsletter
+     and product notifications for registered and non registered customers. 
+
+  *) Introduced a getReviews API call to the storefront engine to provide greater
+     flexibility (more constraints and sort by options) when searching for reviews.
+     The API call now also returns an array of review rating facets which show
+     how many reviews are present for each rating.  
+
+  *) A License Key is now required to run the Enterprise Extensions.   License keys
+     are added in the KonaKart Admin App...  Ask sales@konakart.com for your 
+     personalised keys.
+
+  *) Improvements to the Installer for Linux platforms which now sets more
+     platform-specific configuration parameters which saves time by avoiding 
+     the need for manual configuration of these after installation.
+
+  *) Enhancements and speed improvements to Google Base interface. Google's 
+     "Product Type" is now derived from the position in the Category Tree.
+
+  *) Introduction of product dimension attributes (length, width, depth)
+  
+  *) Product weight column expanded to allow 15 characters instead of just 5.
+  
+  *) The method splitNameIntoFirstAndLastNames() in BasePaymentModule has been
+     deprecated with improved functionality being provided in the new 
+     getFirstAndLastNamesFromAddress method.  All payment modules have been
+     updated to use the new method as applicable.
+
+  *) Validation of coupon code when inserting a coupon in the admin app is now
+     configurable.
+ 
+  *) Added the option to search for text in the product description in the 
+     Admin App.
+
+  *) Allow the possibility to specify "From Address" and "Reply To Address" on
+     emails sent through the APIs.  
+
+ 
+Bug Fixes
+---------
+
+  *) Added invoiceNumber to the recurring billing request sent to AuthorizeNet.
+     This information stops AuthorizeNet from thinking that it is a repeat 
+     request. 
+
+  *) The array of Tags belonging to the TagGroup objects returned by the 
+     getTagGroups() API call were not being fully populated. The id of the 
+     tags was missing. This meant that it wasn't possible to add or remove a tag
+     and call the updateTagGroup() API call.
+
+  *) Fixed a bug that was causing an exception when an admin product query was 
+     returning no products and isFillMiscItems() set to true.
+     
+  *) Problem making the Customer Reviews button invisible using the Role
+     Privileges.  
+
+  *) In certain configurations of Apache (notably with proxy servers being used)
+     PDF viewing wasn't working.  Now fixed by adding application/pdf as the 
+     content type.
+
+  *) When setting up an expression, if the first variable displayed (Age of Customer)
+     was used without modifying the default "greater than" operator, then the 
+     generated expression would pick up the "equals" operator instead.
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) v6.5.0.0 introduces the new Struts 2 based storefront.  By default the standard 
+     installer (and its Enterprise partner) will install the new Struts 2 based 
+     storefront.  So, for new installations, if you wish to install the 6.5.0.0 
+     version of the Struts 1 based storefront you will need to first install the 
+     standard Struts 2 based storefront, then you must run the Struts 1 installer 
+     and its Enterprise partner if applicable).  For upgrade installations where 
+     you wish to keep your previous version's Struts 1 based storefront the recommended
+     approach is to:
+
+     * Save your existing store front application somewhere safe before you start
+     * uninstall KonaKart
+     * Install all of the following in the same location over the top of eachother:
+     * Using the standard installer, install the new Struts 2 based storefront (but do 
+     not update the database using the installer)
+     * If you're using the Enterprise version, install the standard Enterprise version 
+     of the Struts 2 based storefront (again do not update the database using the 
+     installer)
+     * Install the Struts 1 based storefront (again do not update the database using 
+     the installer).
+     * If you're using the Enterprise version, install the Enterprise version of the
+     Struts 1 based storefront installer (again do not update the database using the 
+     installer)
+     * Execute the upgrade SQL scripts for your database type for every release from 
+     the one you started with to the latest.  Run these one at a time in sequence.
+     * Move your previous Struts 1 based storefront code back into the konakart webapp
+  
+  *) The API call getManufacturersPerCategory() now returns manufacturers for products
+     of the selected category and all of its children. The new getManufacturers() API
+     call may be used to return the manufacturers for only the selected category.
+ 
+
+Changes with KonaKart 6.4.0.0 - Released 11-Sep-2012
+====================================================
+  
+  *) Addition of PunchOut functionality complying to OCI Rel. 4 . 
+     Feature allows corporate users to create orders within their
+     ERP systems.
+
+  *) In file based configuration for admin app, added option to not set
+     a date by default for the product Available Date.
+
+  *) Allow the definition of integer(min,max) and double(min,max) for
+     module configuration parameters (define using the set_function).
+
+  *) Upgraded to Quartz 2.1.5
+  
+  *) Improvements to consistency of treatment of emails and more options to
+     control email sending (content type, blind copies, synchronous/asynchronous).
+
+  *) New FBC (File based configuration) properties added for configuring email usage
+     in the Admin App (eg. defaults for BCCs and content type).
+
+  *) Ability to create PDF files from custom templates (not just invoice,
+     packing list and order details as before).  See PdfOptions.
+
+  *) TemplateBase variable added to velocity context by default - useful for 
+     specifying includes of style definitions for example.  Examples of the use of
+     this in the default velocity templates.
+
+  *) Extended the ability to add custom business objects to the Velocity context
+     to make these available for the Velocity templates.  Now possible to add your
+     own objects for Invoices, Order Details, Packing Slips and your own custom
+     templates.
+
+  *) ESC key can now be used to close Help dialogues in the Admin App.
+  
+  *) Allow the setting of a full path for the KonaKart and KonaKartAdmin properties
+     files in their respective EngineConfig objects.  These properties files do not
+     have to be on the classpath.  This can be handy for setting up different 
+     properties files for different environments (DEV, TEST, PROD etc).
+
+  *) Custom panels in the Admin App now get additional parameters (Display language 
+     Id, Admin User Id and Store Id) appended to the specified URLs (Enterprise Only).    
+
+  *) When sessions are found to have expired they are removed from the database.
+  
+  *) Added Global Collect Payment module
+
+  *) As a diagnostic aid you can set "log4j.logger.com.konakartadmin.server = DEBUG"
+     to reveal all the Admin API calls made by the Admin App as you use it.  
+     Particularly useful when figuring out which methods to override in a custom 
+     engine.
+  
+  *) Every time reviews are inserted or made visible / invisible or deleted, the related
+     product is updated with the total review count and average rating. For performance
+     considerations, the average rating is no longer calculated every time a product 
+     is fetched through the API. A batch program has been added to the Enterprise version
+     to traverse all of the products in the catalog and set the review count and 
+     average rating.
+
+  *) Modified the Enterprise installer to define the use of Enterprise versions of
+     the SecurityMgr and AdminSecurityMgr classes by default.
+
+  *) Default username changed from the irregular "root@localhost" to "doe@konakart.com"
+
+
+Bug Fixes
+---------
+
+  *) Exception was being thrown if a currency was defined without a
+     thousands separator.
+
+  *) Problem solved with matching existing Customer Groups when importing using 
+     the XML_IO  utility.
+
+  *) Fixed the jQuery example shortcut which wasn't updated after the jQuery
+     code was relocated in 6.3.0.0
+
+  *) Fix a "Bad Request" exception in GoogleShopping interface when an attempt
+     is made to delete a product that no longer exists.
+
+  *) USA ePay payment gateway - the billing state is now specified as the state 
+     ("Zone") code instead of the full state name (e.g. CA instead of California).
+
+  *) updateOrder API call on the storefront engine wasn't setting the updated_by_id 
+     correctly from the updateOrder object passed in as a parameter.  
+
+  *) When uploading images using the Admin App a strange occasional "There has 
+     been a problem with the upload <PRE></PRE>" error message would appear.  The 
+     image upload was always successful despite this message.  This spurious error 
+     message has now been eliminated.
+  
+  *) To support Custom Validation in the Admin App using a Custom Admin Engine it
+     is now possible to hide the "More Details" button on the error dialog box 
+     that is displayed in the Admin App when an exception is thrown from a Custom
+     Admin Engine interface.
+
+  *) The addRelatedProducts() Admin API call was setting the wrong quantity
+     for bundle relationships when updating the relationship. This was only occurring 
+     when the relationship already existed. 
+
+  *) Drop lists in the custom field panel of admin app weren't being displayed properly
+     in Internet Explorer.
+
+  *) Under certain circumstances the payment method attribute was being saved 
+     incorrectly on orders.  This was happening under certain conditions when multiple
+     payment options were provided and the user switched between them.
+
+  *) Address formatting was throwing an exception when the replacing string contained a 
+     "$" character.
+
+  *) CustomerId not being set under certain conditions in the Admin App when only one
+     panel is authorised for the active role.  This caused errors when attempting to 
+     run BIRT reports from the Admin App.
+
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) With the upgrade of Quartz the syntax of the jobs definition files has 
+     changed a little.  An example of the new structure is provided in 
+     quartz.properties and konakart_jobs.xml.
+
+
+Changes with KonaKart 6.3.0.0 - Released 20-Jun-2012
+====================================================
+  
+  *) Added Shopping Widgets which can be introduced into social networks,
+     blogs etc. with just a few lines of JavaScript.
+
+  *) Added a new API call to request the version number of the KonaKart 
+     engine.
+
+  *) Issue a warning if the version of the Admin App is incompatible with 
+     the version of the server.  (The behaviour associated with this check 
+     can be customized by modifying the konakartadmin.compatibility.action
+     configuration parameter in the konakartadmin_gwt.properties file).
+
+  *) Renamed some of the default Shipping Module text properties to be more 
+     meaningful.
+
+  *) Added an Affiliate Id attribute to the order object.
+
+  *) Added the JSONP protocol (JSON with padding) to provide a method to 
+     request data from a server in a different domain. 
+
+  *) Added a "return_by_api" attribute to the configuration parameters.  If 
+     a configuration parameter has this attribute set to 0 (false), it will
+     not be returned by the various getConfigurations() API calls on the 
+     storefront engine.   This improves performance (as previously all 
+     configurations were cached for each client session), reduces memory usage 
+     and tightens security by allowing greater control over which parameters 
+     are accessible through the engine.  See below for more details on the
+     changes that might affect existing custom code that uses these interfaces
+     to access configuration values.
+
+  *) JSON server is now disabled by default.  To enable JSON move to the custom
+     directory of the installation and execute the enable_JSON ANT target.
+
+  *) Added the ability to make specified interfaces inaccessible via JSON. Set
+     these interface names in the konakart web.xml as JSON servlet parameters
+     - see the includedInterfaces and excludedInterfaces init-parameters.  This
+     provides greater flexibility in defining which interfaces are made 
+     available over JSON.
+
+  *) The entries in the product type list box in the edit product panel of 
+     the admin app can be excluded and ordered using file based configuration.
+     A "Please Select" entry has been added for the cases where you want to 
+     force the admin user to choose a product type rather than being able 
+     to accept the default type.
+
+  *) Added more custom validation parameters for XML_IO.
+  
+  *) Introduced the ability to use substitution variables in the Admin App
+     Help messages which allows you to define repeated sections in one place
+     and "include" them wherever you like.  This also allows Oracle and DB2 
+     users (who had a 4000 byte limit on the size of these messages) to create
+     messages of any length by splitting messages into smaller messages and 
+     combining them in one message using substitution.  See the format for
+     substitutions (${name}) in the help.editProductsDetails property as an
+     example.
+
+  *) Viewing of PDF invoices now possible from the storefront within Liferay
+
+  *) Using File-based Connfiguration it is now possible to define the number
+     of customers, orders, products and reviews returned in each group for
+     display in the Admin App.
+
+  *) Added a new API call to search for a customer's subscriptions.
+
+  *) Modified Solr suggested search to use (configurable) a regex search on 
+     the terms so that is doesn't only match the term string from the 
+     beginning of the term.
+  
+  *) Added a config variable to set expungeDeletes="true" when doing a Solr 
+     commit. When set, objects marked for deletion are removed from the index.
+     This is important for suggested search since the Solr terms functionality
+     returns documents that have been marked for deletion but not removed
+     from the index.
+
+  *) Increased the size of 5 columns in the database for storing CITY values.
+
+Bug Fixes
+---------
+
+  *) Store front application was throwing an exception when using customer 
+     tags and when the session expired.
+
+  *) The JSON API wasn't encoding all characters correctly.
+
+  *) Repeat order was throwing an exception when using a shipping module
+     that returns multiple quotes.
+
+  *) Category Shared indicator now passed correctly to getPdf and DisplayFile
+     servlets.  Previously it was not passed at all which meant these would
+     always use the default of categories not shared.
+
+  *) tick.gif, cross.gif images added to konakart/images for use in velocity
+     templates when running as a portlet within Liferay
+
+  *) Commidea payment module was not setting the ProcessingDB on all requests.
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) The JSON Server has become an Enterprise-Only feature.
+  
+  *) Configuration parameters now have a new "return_by_api" attribute.  To 
+     return the value of a configuration parameter through the storefront API
+     (KKEngIf) you need to set the return_by_api column to 1 (true).  By
+     default the return_by_api value will be 0 (false).  Therefore, you will
+     need to set these values to 1 (true) if you need to access them using the
+     various getConfiguration() API calls on the storefront API (KKEngIf). The
+     database upgrade scripts for the 6.3.0.0 release set the "return_by_api"
+     attribute to 1 (true) for all configuration parameters in a defined set of
+     configuration groups (see upgrade scripts for details) which in the default 
+     installation are required by the storefront to function correctly.  You 
+     should review the configuration parameters that are returned by the APIs
+     for suitability in your system. The Admin App has been modified to allow
+     you to set the "return_by_api" setting for each configuration parameter.
+     It is recommended to set "return_by_api" to 0 (false) wherever possible to
+     maximize performance, minimize memory usage and tighten security.
+
+  *) The editConfiguration() API call on KKEngIf has been deprecated but has
+     also been modified to return a KKException in all cases.   You should use 
+     the Administration APIs (defined in KKAdminIf) to modify configuration
+     parameters.
+
+
+Changes with KonaKart 6.2.0.0 - Released 19-Apr-2012
+====================================================
+
+  *) Added a new View Logs Panel to the Admin App to allow an 
+     authorised Administrator to view the files in the log directory.
+
+  *) Improved expressions with the addition of an AGE_TYPE customer
+     tag. Allows you act on the  elapsed time (or age) of an event. 
+     i.e. To store the date of the last login for the customer
+     so you can take action if a customer hasn't logged in for two 
+     weeks. Alternatively you could store the age of a customer 
+     to offer promotions to certain age brackets.
+
+  *) Added a warning to the Promotions Panel in the Admin App
+     to warn when the module for a selected promotion hasn't
+     been installed yet.
+
+  *) Database modification to allow entry_firstname and entry_lastname
+     columns of the address_book table to contain null values.
+
+  *) New kk_config table to record miscellaneous system characteristics
+     such as database version and type.   Read-Only access to this 
+     table is available via new API calls (hence this could be used to
+     store miscellaneous custom data that has a "Key" and a "Value").
+     Note that these are global values and not per store if running in a 
+     multi-store mode.
+
+  *) Exception messages populated with KonaKart version number to 
+     provide additional information to aid with diagnosing problems.
+
+  *) Added buttons to Reviews Panel in the Admin App to enable the
+     selection of the product and the customer who wrote the review.
+     
+  *) A new updated_by_id column has been added to the 
+     orders_status_history table to record the user who made the change 
+     to the order status.  New APIs have been added to allow you to 
+     specify this new Id on order status changes - see the new
+     updateOrder API.
+
+  *) Added option to not calculate the quantity of a bundle product 
+     based on the quantities of the bundled products. The option also
+     applies when updating the inventory.  
+
+  *) On the Customers Panel of the Admin App it is now possible to search
+     for customers by customer Id, first name, and email address.
+
+  *) Introduced a new Commidea Vanguard Payment module
+
+  *) Added an animated gif to credit card entry panel to stop customers
+     clicking the submit button multiple times.
+
+
+Bug Fixes
+---------
+
+  *) Avoided some null exceptions occurring when displaying products 
+     with null names and descriptions.
+
+  *) Avoided some null exceptions occurring when not finding SSO tokens
+     for specified secret keys.
+  
+  *) Admin App panels when using Internet Explorer were not displaying 
+     the hour and minute drop lists properly when selecting a date.
+
+  *) Removed spurious characters that appeared when switching from the
+     rich text editor to the plain text editor of the Admin App when
+     using certain browsers. Firefox and Chrome injected a break tag 
+     and IE injected a non-breaking space within a paragraph tag.
+
+  *) Modified the OrderTotalDiscount promotion module to reduce the 
+     tax when calculating a discount on the pre-tax total of an order.
+
+Changes with KonaKart 6.1.0.0 - Released 13-Mar-2012
+====================================================
+
+  *) Improved recurring billing functionality and documentation. 
+     Implemented all payment gateway calls for AuthorizeNet to 
+     insert, update and cancel a subscription.
+  
+  *) Added a new mode: Shared Category mode which is valid only when
+     sharing products and customers.
+
+  *) Added an Admin API call to copy products between store when in 
+     shared category mode.
+
+  *) New feature for analysing the performance of the storefront APIs.
+     Useful as a starting point for overall performance analysis.
+
+  *) Added some logging options to allow logging changes to be made and 
+     take effect without the need to restart.
+
+  *) Upgraded to BIRT 3.7.2
+
+  *) Added a batch job to synchronize stores when in shared category 
+     mode. This allows you to have a pre-production store and a 
+     production store. 
+
+  *) Added an Admin App panel to synchronize products between stores.
+
+  *) Allow the use of a text entry field rather than a droplist for specifying
+     the store to log in to when in Multi-Store mode in the Admin App.
+
+  *) Now possible to view the Admin App using a language that is for 
+     display-only purposes where entities such as products & categories do
+     not need a translation defined for this language.  (Previously it was
+     necessary to provide translations for all languages for the entities
+     that have language variants).
+
+  *) Added a KKServletContextListener to manage the shutdown of miscellaneous
+     threads to avoid memory leaks.  To enable this ensure that this <listener>
+     section in the web.xml is uncommented (it is uncommented by default).
+
+Bug Fixes
+---------
+
+  *) When in shared products mode edit product had a bug whereby if more
+     than one category was changed in one edit API call, only the first
+     link in the product_to_category table was saved with the storeId.
+     The other links were saved with a null storeId.
+  
+  *) Added fix to ConfigCacheUpdater when in multi store shared db mode
+     to only return enabled stores. In some cases it would try (only once)
+     to refresh the caches of stores that weren't enabled.
+
+  *) Added fix to EngineConfigCacheUpdater to terminate its thread after 5
+     consecutive exceptions.  Under certain circumstances this thread was
+     not terminating even after the rest of KonaKart was stopped.
+
+  *) When inserting and editing products, the external prices and quantities
+     were being set outside of the main transaction.
+
+  *) When searching for products in the admin app using the SKU, the default
+     wildcard search settings weren't being used.
+
+  *) When in multi-store shared products mode the admin app was displaying
+     reviews for all products even if they weren't present in the store.
+
+  *) When in multi-store shared products mode the admin app was displaying
+     miscellaneous items for all products even if they weren't present in 
+     the store.
+
+  *) Subscriptions panel in the admin app was throwing an internal exception 
+     when subscriptions were inserted with a null trial amount value.
+
+  *) Added scale to a divide in the TaxMgr which was throwing an exception
+     when external prices were being set in the basket not divisible by the
+     quantity of products present.
+
+
+Changes with KonaKart 6.0.0.0 - Released 1-Jan-2012
+===================================================
+
+  *) Improved the KonaKart promotion subsystem (Enterprise only) by adding 
+     functionality to evaluate promotions on individual products rather 
+     than as Order Totals. This means that a customer can now visualize 
+     the details of active promotions for a product before adding it to 
+     the cart. 
+
+  *) Added functionality to support product options with variable quantity.
+     (Enterprise Only) i.e. Customer can choose number of GigaBytes of 
+     extra memory by entering an amount rather than choosing a fixed option.    
+  
+  *) The object containing payment gateway callback information has been 
+     given some extra attributes so that more information can be stored
+     regarding the transaction type, transaction amount and custom 
+     information.
+
+  *) Added a new enableCustomer() API call and struts action to call it.
+     This method can be used to verify a customer's email before enabling him. 
+
+  *) Added some custom relationship types in the Admin App for setting up 
+     product to product relationships. 
+
+  *) Added animated gif to GWT one page checkout code to show customers
+     that the system is waiting for data to arrive. Useful for the case when
+     interfacing with external shipping or tax systems that may take a few
+     seconds to respond.
+
+  *) Upgraded to new version of jTDS (v1.2.5) - for details of changes see 
+     http://jtds.sourceforge.net/
+
+  *) Upgraded to new versions of avalon-framework-api (v4.3), 
+     commons-collections (v3.2), commons-configuration (v1.7), 
+     commons-logging (v1.1), jcs (v1.3) and downgraded commons-pool (v1.3).
+
+  *) Upgraded to new version of Torque (v3.3) and Village (v3.3).
+
+  *) Remove the limit of displaying only 1000 Admin Users in the panel where
+     the users are given roles. 
+
+  *) Product Option and Option Value names have been given a max size of 64
+     characters and the validation length through the admin app is now
+     configurable.
+
+  *) Added KK Engine API call, getAllPromotions(), to return all active
+     promotions. 
+
+  *) Made the Enterprise Extensions installer more robust when installing to 
+     Community Edition systems with non-default data present.
+
+  *) Added a new SQL Analysis utility (Enterprise Only) that can provide a 
+     quick overview of the SQL performance of the system.
+
+  *) Added Online Help for Reports Configuration in the Admin App.
+  
+  *) When deleting a GeoZone (or "Tax Area") using the deleteGeoZone() Admin 
+     API call, in order to maintain data integrity, any tax rates that use the 
+     specified geoZone are also deleted.
+  
+  *) In the Admin App the date template is now read from the message catalog
+     so that different languages can have different templates. Some of the dates
+     are now shown with hour:minute precision.
+
+  *) Ability to define the default value for and/or hide the "Requires Coupon" 
+     checkbox on the Promotions panel of the Admin App using File-Based 
+     Configuration.
+
+Bug Fixes
+---------
+
+  *) Save button sometimes enabled at wrong times on Tax Classes Panel of the
+     Admin App.  A minor usability improvement.
+
+  *) Fixed bug that allowed checkout without selecting a shipping method 
+     when using the JSP checkout screens.
+  
+  *) Fixed a SOLR related problem in multi-store shared products mode. When 
+     editing a product for one store, the categories of the product in other
+     stores were being corrupted in SOLR.
+
+
+Changes with KonaKart 5.8.0.0 - Released 08-Dec-2011
+====================================================
+
+  *) Introduction of a jQuery plugin enabling you to call the KK storefront 
+     API from JavaScript AJAX calls. The plugin uses the JSON APIs which are
+     now available in the community version. Documentation available under 
+     the doc directory after installation.
+
+  *) Added possibility to perform faceted product searches using SOLR. The facet 
+     attributes can be defined for different types of products using the custom 
+     attribute functionality.
+
+  *) "Miscellaneous Items", with defined "Miscellaneous Item Types" can now be 
+     associated with products and categories.
+
+  *) Added 5 custom fields to the EmailOptions objects to provide greater
+     flexibility in customizing the generation of email messages.
+
+  *) New CyberSource Hosted Order Post Payment Gateway Module.
+
+  *) Now bundled with Apache Tomcat 7.0.22 (previously bundled with 6.0.33).
+     Note that this version of tomcat requires a minimum Java version of 1.6.
+
+  *) A new utility to create encrypted database passwords for the properties 
+     files so that they don't have to be stored in plain text. (Enterprise 
+     Extensions only).
+
+  *) A security feature has been added for the BIRT Viewer.  By default this
+     is enabled.  With this enabled it is now essential to have a valid 
+     sessionId in order to execute a report using the BIRT viewer.
+
+  *) Upgraded two apache-commons jars (to dbcp-1.4.jar and pool-1.4.jar). These
+     provide various bug-fixes and improved JDBC support.
+
+  *) Upgraded to allow the hiding of the Edit button on the Orders panel via 
+     role-based security.
+
+  *) Allow the use of a CLOB for the custom attributes column in Oracle so
+     that more than 4000 characters can be used for custom attributes if 
+     required.
+
+  *) Modified the order panel of the Admin App to resize automatically to 
+     fit lower resolution displays.
+
+  *) Replaced unmappable characters from CyberSource java files so that they
+     can be compiled without warnings on platforms where UTF8 is the default
+     encoding.
+
+  *) Added the option to hide the Print button on the Order Invoice Panel
+     of the Admin App (using file-based configuration).
+ 
+  *) Now possible to rename the default store from "store1" to another name.
+     This is still not recommended practice but possible if required.
+
+  *) Upload button moved to a new position to allow the Manufacturer's panel
+     of the Admin App to fit on a smaller screen.
+
+  *) Centred Admin App dialog boxes using a different technique to place them 
+     in more central positions on all platforms.
+
+  *) Added functionality to the storefront app in order to facilitate SSO 
+     by passing customer and session information in a secure way when moving 
+     between two different applications using the same engine. i.e. A CMS system
+     to place products in the cart and another system to checkout. 
+  
+  *) When inserting a product using the admin app, you can now specify hour:minute
+     precision for the available and expiry dates.
+
+  *) When inserting a promotion using the admin app, you can now specify hour:minute
+     precision for the start and end dates.
+
+  *) The select manufacturer and select template dialog boxes in the admin app 
+     have been given a double click handler to make a selection. 
+    
+  *) Added functionality in the Admin App to facilitate the maintenance of custom
+     attributes. When custom attribute descriptions are modified or deleted, 
+     there is now the option to automatically update all of the products using
+     the custom attribute. 
+
+  *) Added last modified date as a search constraint for products in the Admin
+     App API.
+
+  *) Added File Based Configuration parameters to the Admin App to make the 
+     title of the Edit Product panel configurable. You can now decide whether 
+     to show the product name, SKU or both.
+
+  *) Added a File Based Configuration parameter to the Admin App to make the 
+     Products panel configurable. You can now decide whether to show
+     the product name or SKU in the first column of the array.
+
+  *) Added a RichText custom field widget to facilitate data entry for 
+     template based custom fields containing lines of text.
+  
+  *) Added an API call to the storefront API to check whether a coupon
+     exists and whether it is active.
+
+  *) Digital Downloads shipping module now installed by default.
+
+
+Bug Fixes
+---------
+
+  *) Modified EditAddrBody.jsp to fix bug whereby phone numbers weren't
+     being displayed and therefore lost when the address was edited. 
+
+  *) When the Admin App is deployed to a webapp with a different name the
+     PDF viewer failed because it was hard-coded to use "/konakartadmin".  
+     The Admin App code now derives the webapp name dynamically.
+
+  *) Due to changes in the default treatment of escaped strings in PostgreSQL
+     9.1 the syntax in the database loading scripts (konakart_demo.sql etc)
+     has been modified.  Previously the regular expression loaded for the
+     sample custom attribute for date recognition was being imported 
+     incorrectly into PostgreSQL 9.1.  For users of earlier versions of 
+     KonaKart, this can be fixed by running the database upgrade scripts.
+
+  *) In the Admin App, invisible products weren't being displayed after 
+     having been added as a merchandising link (up sell, cross sell etc.)
+     or as a promotion rule.
+
+  *) A race condition has been fixed which sometimes caused the deletion
+     of all merchandising links (i.e. Up Sell) to a product when only 
+     attempting to delete one.
+
+  *) When a product is saved, the merchandising drop list in the 
+     merchandising panel, no longer resets to "Up Sell". It keeps
+     the current selection.
+
+  *) The Category panel in the Admin App wasn't counting invisible products
+     in the number of products per category.
+
+  *) Modified encoding for the directory structure SEO URLs in order to 
+     remove encoded forward and backward slashes which are not allowed
+     by some app servers for security reasons. Any forward and backward
+     slashes in product, manufacturer or category names are converted to
+     dashes "-" in the SEO URL.
+
+  *) Increased the size of the products_name attribute in the orders_products
+     table to 256 to match the products_name in the products_description
+     table.
+
+  *) Updated MyProductMgr.java (in apiexamples) to reflect the latest
+     method signatures.
+
+  *) Fixed admin app bug when viewing products for manufacturers. The 
+     manufacturer constraint wasn't being set properly when filtering
+     the search results with more constraints.
+
+  *) The formatting of hour:minute in the edit product panel of the Admin
+     App has been modified to always show two digits for hour and two for 
+     minute. The modification affects the definition of special price start 
+     and end dates as well as bookable product time slots.
+
+  *) The option to delete products when deleting a manufacturer or a category,
+     wasn't deleting invisible products.
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) With the introduction of tomcat 7 there is now a requirement to use a 
+     minimum java version of 1.6 (previously we supported Java 1.5 and above).
+
+  *) The JSON APIs are now "switched on" after a default installation. The 
+     web.xml file of the konakart webapp must be edited in order to disable
+     them.
+
+
+Changes with KonaKart 5.7.5.0 - Released 13-Oct-2011
+====================================================
+
+  *) SOLR searches now return facets for categories and manufacturers
+     so that the search results can be filtered using this information.
+
+  *) Enhanced product search to enable searching for products in multiple
+     categories and for multiple manufacturers.
+
+  *) Added a new mode for formatting URLs for SEO. The standard format
+     for URLs is now a directory structure containing the SEO data
+     rather than extra attributes.
+
+  *) Provide access by default to the Velocity EscapeTool to escape output
+     from your Velocity templates (for emails, orders etc).  
+
+  *) Improved functionality of the getRelatedProductsWithOptions()
+     API call of the Application Engine. The improvement is to allow 
+     to invert the direction of the related product link. This is 
+     especially useful for bundled products, so rather than discovering
+     the products within a bundle, you can determine which bundles a 
+     product belongs to. 
+
+  *) Automatic redirect to konakart webapp when the http://localhost:8780/ is
+     used.
+
+  *) Upgrade of SOLR. KonaKart is now shipped with SOLR 3.4.0.
+
+  *) Modified updateOrderStatus() API call of Admin App to allow status change
+     using the same status.
+
+  *) Enterprise Source pack now places the relevant Enterprise-only source 
+     files under the custom directory for easier custom ANT building.
+
+  *) Include the import and export of product tags in the XML_IO utility.
+  
+  *) Allow the definition of translations of module names so that they can be 
+     viewed in the currently-selected language in the Admin App.
+
+  *) Drop lists for promotion types and order statuses are now populated with
+     entries in the currently-selected language in the Admin App.
+
+  *) Increased the size of the category name to 256 characters.
+  
+  *) Provide more flexibility in defining localisations with the introduction 
+     of several new Admin App message properties that can be defined for
+     each language.
+
+
+Bug Fixes
+---------
+
+  *) The GetBestSellers API call of the App Engine wasn't returning the special
+     price of a product.
+  
+  *) Allow more than one store to be cloned at the same time.
+
+  *) Admin App fix to prevent Administrators accessing the kk_store records
+     of stores they are not authorised to access.
+
+  *) Fix for the Admin App when installing the LDAP module on Oracle when it is
+     the only "Other" module installed.
+
+  *) Fixed encoding problem when uploading images from the admin app with 
+     double byte character names. The name of the image on the file system 
+     wasn't being set correctly.
+
+  *) When registering / checking out using the one page checkout GWT code
+     the default country in the drop list was not being set to the store 
+     country in some browsers. 
+ 
+  
+Changes with KonaKart 5.7.0.0 - Released 13-Sep-2011
+====================================================
+
+  *) New CyberSource Payment gateway
+
+  *) New WorldPay XML Redirect Payment gateway
+
+  *) New Free Gift Order Total Module. 
+
+  *) Added custom fields to order totals.
+
+  *) Now bundled with Apache Tomcat 6.0.33 (previously bundled with 6.0.18)
+
+  *) Changes some struts action classes to do a 301 redirect rather than 302
+     when adding SEO data to the URLs. 
+
+  *) Added an attribute to Order to keep track of who created the order.
+     It is automatically set when logging in to the storefront app as 
+     an admin user and creating an order.
+
+  *) Use version number in GWT nocache.js files to ensure GWT applications
+     (Admin App and components in the Storefront) are updated by browsers 
+     after upgrading to new versions.
+
+  *) Ability to define the default value for and/or hide the "Use Customer 
+     Language" checkbox on the Customer Communications panel of the Admin 
+     App using File-Based Configuration.
+
+  *) Modified testDB() API call of Admin App to not return the database connection
+     string and database user. The API call remains backwards compatible but only
+     returns information to determine whether a DB connection can be made.
+
+  *) If present, use the Order Number for the Invoice Filename rather than
+     the internal Order Id.
+
+Bug Fixes
+---------
+
+  *) One page checkout new customer registration fixed
+
+  *) Engine was throwing an exception when retrieving a wish list for a
+     temporary customer containing a disabled or nonexistent product.
+
+  *) Change language wasn't working properly for the admin app when 
+     running within a Liferay Portlet.
+  
+  
+Changes with KonaKart 5.6.0.0 - Released 24-Aug-2011
+====================================================
+
+  *) LDAP module to connect to an LDAP directory in order to validate
+     customer and admin user credentials.
+
+  *) In Admin app can now search for orders based on customer name, 
+     email and postcode in order to search for orders for non 
+     registered customers.
+
+  *) Added the ability to add custom business objects to the Velocity context
+     to make these available for your Velocity templates.
+
+Bug Fixes
+---------
+
+  *) Fixed bug when inserting coupons using the admin app. The times_used 
+     attribute was getting set to the value of the coupon selected
+     before the insert.
+
+  *) In the TaxAreaMapping panel of the Admin App, the Search and Clear buttons
+     were overlapping the border of the search panel in Chrome and FireFox.
+
+  *) Wrapped the manufacturer name in CDATA when sending a product to the 
+     SOLR search engine to avoid having to encode certain characters within
+     the manufacturer name such as the ampersand character.
+
+  *) Fixed bug in multi-store non shared customers mode. In some cases the 
+     categories weren't being displayed in the categories tab of the 
+     edit product panel.
+
+  *) The Change Language functionality of the admin app wasn't working 
+     correctly when the file based configuration property was set so that
+     the password is never stored in a temporary cookie.
+
+  *) A fix for the "controversial" new deferred segment creation feature 
+     introduced into Oracle 11gR2 (Enterprise Only).  Installations failed 
+     with this db with the default setting of DEFERRED_SEGMENT_CREATION=TRUE.
+     Now our Oracle scripts set DEFERRED_SEGMENT_CREATION=FALSE on the session
+     to ensure that the installation runs as required.
+
+
+Changes with KonaKart 5.5.0.0 - Released 02-Aug-2011
+====================================================
+
+  *) Introduced Bookable Products functionality to cater for products such 
+     as courses.
+
+  *) Added functionality to the admin app to allow you to manage catalog prices
+     and quantities. 
+
+  *) Added an "Active" attribute to the Country objects allowing you to mark
+     countries as "Active" or "Inactive".
+  
+  *) Repeat Order functionality of the storefront application now repeats
+     the billing and delivery addresses rather than just presenting the 
+     default ones.
+
+  *) Made the product type search droplist (Admin App Products Panel) configurable 
+     using the Hidden Product Types configuration variable.
+
+  *) New Payment Gateways Added:  Barclaycard SmartPay Hosted and Barclaycard 
+     SmartPay API (both with 3D-Secure capability).
+
+  *) The "sessionId" parameter has been added to the URL when reports are run
+     from the Reports panel of the Admin App.   This allows you to authenticate 
+     the user by checking the sessionId (this is the KonaKart SessionId).  The 
+     sessionId has also been added to the "Status Page Report URL" that is displayed
+     in a frame on the "My Store Status Panel".
+
+  *) In the product listing view of the Admin App only show the special price if
+     it is enabled.
+  
+  *) In the Returned Products panel of the Admin App, a new Return can now be
+     inserted by entering the order number rather than the order id. 
+     
+Bug Fixes
+---------
+
+  *) Added Order by Rating constraints to Solr mgr.
+
+  *) Fixed a bug in the XML_IO utility where a property was referred to as 
+     "mesaages" rather than "messages".
+
+  *) Calendar Pop-up bug fixed where the wrong date was being selected (when 31/5/2011
+     was clicked on, 1/5/2011 was actually selected).
+
+  *) Fixed a bug where in the admin app where the image servlet url was hard 
+     coded when uploading manufacturer and category images.
+  
+  *) Fixed a bug in the admin app where sorting products by price was
+     generating an exception when using MS SQL.
+
+  *) The tep_cfg_pull_down_order_statuses( set_function wasn't working properly in
+     every store in multi-store mode with non-shared customers.  This bug caused
+     order status droplists to be empty in some of the stores. Now fixed.
+
+  *) Fixed a start-up race condition where configuration variables could be
+     accessed before they were initialised.
+
+  *) When the admin app was integrated with Liferay and the KonaKart session 
+     was timing out before the Liferay session, an exception was being thrown. 
+
+  *) Installer defaulted to mysql when installing the Enterprise Extensions in
+     engine Mode 1 (multi-store multi-datbase mode).   Now the wizard presents
+     a database type choice to allow the user to override this default.
+
+
+Changes with KonaKart 5.4.0.0 - Released 20-May-2011
+====================================================
+
+  *) Suggested Search. As you type into the search box, a list of suggested
+     search items appear matching the typed letters. The suggestions are 
+     weighted by popularity so the most common suggestions are shown
+     first. (Enterprise Only)
+
+  *) JSON version of the KonaKart application engine (another implementation 
+     of the KKEngIf interface).  This allows you to use JSON calls from your
+     storefront application for ALL KonaKart storefront functionality - useful 
+     for many purposes including improving performance over limited-bandwidth 
+     networks and for use on mobile devices. (Enterprise Only)
+  
+  *) Integration with TaxCloud (taxcloud.net) Sales Tax Management System. 
+
+  *) Added File-Based Configuration of the Admin App for global changes. 
+     (Enterprise Only)
+  
+  *) Customer tag functionality is now available for guest customers as 
+     well as logged in customers.
+
+  *) A panel has been added to the storefront application to show 
+     recently viewed products.
+
+  *) In multi-store shared products mode, a product now has 3 custom fields 
+     that may contain store related data. i.e. The data they contain can be
+     different depending on the store.
+  
+  *) Added code in the storefront app to change session when switching to 
+     HTTPS to avoid session hijacking.
+
+  *) Modified the application Register Customer API call to allow to register 
+     customers in a disabled state.
+  
+  *) Made the text on the Delete Product Dialog Internationalizable through
+     the AdminMessages.properties files.
+
+  *) Extended the products_name column in the products_description table from 
+     64 to 256 characters
+
+  *) Wherever the Rich Text Editor is used within the Admin App, the mode
+     can be toggled from Rich Text to Plain Text.
+
+  *) Changed some dynamically created labels in the promotion rules panel 
+     which were not being generated correctly. 
+
+  *) Dynamic reloading of logging settings (now you can change the active 
+     log settings without having to restart tomcat).
+     
+  *) New properties file variable to set the timeout value for the KonaKart 
+     Admin web services.
+  
+  *) Modified storefront one page checkout GWT code to handle session 
+     timeouts gracefully without throwing an exception.
+
+  *) Following Google's decision to retire the Google Base APIs (as from
+     1st June 2011), these have been replaced by the Google Shopping Content 
+     APIs for publishing products to Google.
+ 
+  *) Upgraded to Google GWT 2.3.0 - includes support for Internet Explorer 9
+  
+  *) Complete javadoc provided for client engine, server engine and admin 
+     engine.
+
+  *) Added the ability to specify the HTTPS port number to the command line 
+     installer (previously only the HTTP port number could be specified).
+
+  *) Example "About Us" page added to the demo storefront
+  
+  *) Syntax errors fixed in the service.bat file for setting up KonaKart as
+     a Windows Service.
+
+  *) Allow the definition of the height of the Custom Panels in the 
+     Admin App
+
+  *) Allow the access to the Reviews & Addresses buttons on the Customers 
+     panel (and on the Customer Orders panel) to be controlled using 
+     role-based security.
+
+  *) Allow the access to the Reviews & Addresses buttons on the Product 
+     panel to be controlled using role-based security.
+
+  *) Allow the access to the Coupons & Gift Certificates buttons on the 
+     Promotions panel to be controlled using role-based security.
+
+  *) Privileges panel used for defining role-based security now allows access
+     to all 5 Custom fields rather than just 3.
+
+  *) Modified the way you change the logo displayed at the top left corner 
+     of the Admin App.  Now you just place your own logo in a file called 
+     logo.jpg in the konakartadmin webapp, replacing the existing logo.jpg.
+
+Bug Fixes-App
+-------------
+
+  *) Promotion rules weren't working for categories when a product was in 
+     multiple categories. The product was sometimes not being found 
+     depending on which category was searched first.
+
+  *) # products per category not always calculated correctly when in 
+     multi store shared products mode and products have been excluded
+     from a store.
+
+Changes with KonaKart 5.3.0.1 - Released 10-Mar-2011
+====================================================
+
+  *) Fix to a problem when in Multi-Store non-shared products mode where
+     the correct language Id is not found when trying to access templates
+     from the Admin App
+
+  *) Fix for a bug that occurs when products with options are added to a 
+     promotion rule or gift certificates with options are added to a 
+     promotion. The problem occurs not when adding but when re-reading 
+     the products that have been added. At this point the option value 
+     name and option name are null.
+
+  *) Fix for a race condition when viewing subscriptions from the admin
+     app. Sometimes, the popup waiting dialog never closes when the data
+     appears from the database.
+
+Changes with KonaKart 5.3.0.0 - Released 07-Mar-2011
+====================================================
+
+New Features
+------------
+  
+  *) MQ Integration - Apache ActiveMQ is integrated as an embedded Java Message 
+     Queue (Enterprise Extensions only).
+ 
+  *) Custom Attributes. A product can now be given an unlimited number of custom
+     attributes based on a template that can be assigned to a product. Each 
+     attribute has metadata to enforce validation and choose the widget during 
+     the insert process (using the admin app) and to format the data correctly
+     in the storefront application (Enterprise Extensions only).
+  
+  *) Added a Rich Text Editor to the Customer Communications Panel in the 
+     Admin App.
+ 
+  *) Now possible to display the list of countries in the language of the chosen 
+     locale rather than just the language used for the names in the countries
+     table.
+  
+  *) Data Integrity Checker extended to correct any lack of integrity in Order 
+     Status data.  (Previously the coverage was only for Customer Groups).  It 
+     automatically "repairs" the database by adding missing language records for
+     Customer Groups and Order Statuses.
+
+  *) Added customer preferences to storefront app to allow a customer to choose
+     the page size when paging through lists of products, reviews and orders.	 	 
+
+  *) Upgraded to Google GWT 2.2.0
+
+  *) Added customer events that can be used for reporting purposes. They all get
+     written into a database table that can be in a different DB so as not to
+     impact performance. Events can be used to track things such as customers
+     visiting, logging in, viewing products, removing products from cart, 
+     confirming orders etc. 
+
+  *) Allow addition of an attachment for the following eMail API calls:
+     -sendTemplateEmailToCustomer1()
+     -sendWelcomeEmail1()
+     -sendNewPassword1()
+ 
+  *) Added an invisible attribute to Customers to allow them to be hidden.
+ 
+  *) Allow the use of CLOBs for product descriptions when using Oracle.
+  
+  *) Update to PayPal PayflowPro payment gateway to add VENDOR and PARTNER
+     as configurable parameters.  (If you are upgrading from a previous 
+     version and using PayflowPro you will need to first uninstall this 
+     payment module (in the Admin App) then re-install it after the upgrade
+     to expose the new configuration parameters).
+  
+  *) Added API call to admin engine to call a payment module. An AuthorizeNet
+     Admin App module has also been added. This API call can be used for any
+     payment module transaction such as authorizing payment when products are
+     shipped and for recurring billing transactions.
+
+  *) Added the ability to switch dynamically between the Rich Text Editor 
+     and the Plain text editor on the Messages Panel of the Admin App.
+
+Bug Fixes-App
+-------------
+
+  *) When doing a product search, the total number of products returned was 
+     counting products multiple times when they were under more than one 
+     category. 
+
+
+Changes with KonaKart 5.2.0.0 - Released 15-Jan-2011
+====================================================
+
+New Features
+------------
+  
+  *) New "Buy X Get Y Free" Order Total Module
+
+  *) New "Pick up in Store" Shipping Module
+
+  *) Added drop shipper support by associating addresses to products.
+     Manufacturers can also now have multiple addresses. The Admin App
+     has been enhanced to manage multiple addresses for Customers,
+     Products and Manufacturers.
+
+  *) Modified Order Total object to accommodate an array of order totals.
+     This allows each product discount to have its own line item in the
+     order. i.e. An order total module may return an array of results.
+
+  *) Added invisible attribute and search field to a zone object. Also
+     added functionality to allow to set the zone during registration
+     and address change. Changes should allow better handling of the cases
+     where a US state contains multiple tax zones.
+
+  *) Added custom fields to the digital download object and app API calls
+     to get and edit an object. 
+
+  *) Added functionality to update store front message catalogs when a 
+     refresh cache command is sent from the admin app. When upgrading,
+     a change must be made to the struts-config.xml to enable this 
+     functionality. 
+ 
+  *) Added a multi-lingual description field to the category object.
+  
+  *) Added possibility of creating a wish list even when not logged in.
+  
+  *) Added possibility of limiting the number of times a promotion is
+     used by a customer.
+  
+  *) The getProduct() API call of the app engine now returns an array
+     of ProductQuantity objects for each product which contain the
+     SKU for the product variation as well as quantity in stock 
+     information.
+  
+  *) Added a new method to the Shipping Module Interface designed for 
+     the purpose of integrating KonaKart with 3rd Party Shipping 
+     Applications.  An example is provided for UPS WorldShip which uses
+     the Auto-Import feature to import Orders from KonaKart.
+ 
+  *) When creating a new store dynamically using "Clone Store" in the 
+     Admin App a check is made (in the background) that the new store 
+     name chosen does not already exist.
+ 
+  *) New exportOrder API call for exporting orders in various ways 
+     which can be specified in an options parameter.  One option is to
+     export the full order as XML.
+  
+  *) Now possible to specify which product types will appear on the 
+     product types droplist on the edit product panel of the Admin App.
+     This is done by defining which product types you wish to hide in a new
+     configuration variable on the 'Admin App Configuration' panel.
+ 
+  *) A small number of configuration parameters have been moved to
+     different sections to arrange them in more logical groups.
+ 
+  *) Dialog displaying error messages in the Admin App now uses a vertical
+     scrollbar making it easier to view very long exception messages.
+
+  *) Added product quantity as a criteria to the product search object.
+
+  *) Each server engine instance now has a thread for refreshing cached
+     data. Previously the refresh API call was made from the client engine
+     and so this functionality wasn't available when the client engine
+     wasn't deployed.
+
+  *) Added extra hooks to the KKAppEng to intercept when the config variables
+     are cached and when the temporary data caches are refreshed. 
+
+  *) New Admin App API calls to set / get product prices in external table to  
+     support multiple catalogs.
+
+  *) New Admin App and App API calls to set / get product quantity in external 
+     table to support multiple catalogs.
+ 
+  *) Upgraded the KonaKart installer to version 1.2.15 of InstallJammer see
+     http://www.installjammer.com/docs/index.html?ReleaseNotes for details.
+ 
+  *) New set of getConfigurationValue(key) API calls for KKEngIf that get the 
+     configuration value for the specified key (get as Integer, Bool, etc).
+ 
+  *) Better error reporting when configuration variables cannot be converted 
+     into integers or decimal values - resolves start-up problems which could 
+     result with mis-configured Shipping modules.
+  
+  *) Added page links to page through products in the store front application.
+     Previously paging was only possible using Next and Previous links.
+
+  *) Added image upload buttons to Category and Manufacturer panels in the Admin 
+     App.
+
+  *) Added a review maintenance panel to the Admin App and Review States to allow
+     reviews to be approved before being published.
+
+  *) Now possible to store the application messages in the database or in the 
+     current messsage properties files (which remains the default).   New kkMessages 
+     utility provided to load messages from message properties files into the
+     database.  New Admin App "Messages" panel added for the live maintenance of
+     this messages.	 See User Guide for details.
+ 
+  *) A number of improvements in the handling of files used in the system with 
+     respect to correct use of file encoding.
+
+  *) Extracted the KonaKart logo from the previous image resource bundle to make it
+     easier to add your own company logo to the Admin App.
+
+  *) Modified the admin app to add paging for manufacturers and product options
+     in order to better support large product catalogs.
+
+  *) Upgraded to BIRT 2.6.1
+
+  *) Data Integrity Checker utility introduced to correct any lack of integrity in 
+     Customer Groups data.  It automatically "repairs" the database by adding 
+     missing language records for Customer Groups.
+ 
+ 
+Bug Fixes-Admin App
+------------------- 
+
+  *) Tree view of ProductOptionsPanel now remains open on the node edited 
+     or inserted.
+ 
+  *) Templates used to display invoices, packing slips etc are now selected based
+     on the currently-selected language of the Admin App rather than the default
+     language of the store.
+
+  *) Panels for setting product quantity and availability date were not working
+     when product was invisible.
+ 
+  *) Translation of labels and floatover text now possible for the non-standard
+     Pomotion-Type-specific configuration fields.   This only affected a small
+     number of promotion configuration fields.
+ 
+  *) Clone Store operation checks supplied credentials before commencing
+     the creation of a new store preventing the creation of partially-completed 
+     stores.
+ 
+  *) Transaction errors did not cause rollbacks in all circumstances when saving
+     customer objects in the Admin engine.
+
+  *) Some panels were never showing invisible products regardless of the setting
+     of the configuration variable.
+
+  *) Entry in specials table wasn't getting deleted when the product was deleted.
+  
+  *) Admin App panel for configuring bundled products wasn't working correctly 
+     when one of the bundled products was itself a bundle.
+
+  *) Problem displaying invoices from stores other than store1 in multi-store 
+     configuration.
+
+ 
+Bug Fixes-App
+-------------
+
+  *) Some promotion modules weren't applying the rule properly for applying
+     the promotion only after a minimum number of products are ordered.
+  
+  *) Sort by "times ordered" was not implemented for SOLR searches.
+
+  *) All of the modules (shipping, payment, promotion) have been made multi-store
+     ready. Previously they shared some static variables which didn't allow each
+     store to set them independently.
+
+  *) Wish list management wasn't functioning correctly when products were being
+     added using the store front application in different languages.
+
+  *) If all categories had last modified date set to null, the category tree 
+     cache was never used, so reducing performance.
+
+  *) When using external prices, the option prices were never being shown as 
+     negative.
+
+Bug Fixes XML_IO Importer / Exporter 
+------------------------------------
+
+  *) Configuration Parameters no longer lose their sort order attributes
+     when exporting
+
+  *) Fixed a null pointer exception that occured if wishlists with no items
+     were imported  
+
+
+
+Changes with KonaKart 5.1.0.0 - Released 09-Aug-2010
+====================================================
+
+New Features
+------------
+  
+  *) RMI version of the KonaKart engines added.  Now there are three engine types: 
+     direct java, SOAP Web Services and now RMI.
+
+  *) Payflow Pro payment gateway
+
+  *) Tiered pricing to apply discounts based on quantity ordered. The discount may be 
+     defined as a price or as a percentage.
+
+  *) Concentrated all tax calculations in a class for which source code is provided so 
+     that the algorithm may be easily changed to match rules of different tax
+     jurisdictions.
+  
+  *) Added a special price start date so that now both the start and expiry dates for
+     a special offer may be programmed.
+  
+  *) Allow special price start date, end date and status to be read from the product object.
+  
+  *) Added a customer notification attribute to each order status so that when the status
+     of an order is changed through the admin app, the notify customer checkbox is 
+     automatically set to the value defined by the status. 
+
+  *) By default Velocity logging is directed to the tomcat log rather than to a file
+     called velocity.log in the current directory.
+  
+  *) Made the client engine API call getStoreId(), public so that it can be called
+     from JSPs.
+    
+  *) Custom Validation enhanced for the Admin App to include a wider selection of attributes.
+  
+  *) Allow the decimal places of prices entered in the admin app to be set by a
+     configuration variable. Previous to this they were set automatically based on the 
+     number of decimal places supported by the currency.
+  
+  *) Added new Quartz - KonaKart bridge class that makes it easy to run any batch job in a 
+     loop - once for every enabled store in a multi-store environment.
+
+  *) Allow the price to be defined when a product is added to the cart rather than picking
+     up the price from the product object or from an external catalog.
+
+  *) Added a new street address attribute to the customer address object.
+  
+  *) Added custom fields to product options, product option values and product attributes.
+  
+  *) Added a configuration option that enables a warning to be shown if a duplicate SKU
+     is found when editing or inserting a product in the Admin App.
+
+  *) ANT target provided to create an Eclipse project for developing the storefront 
+     application.
+
+
+Bug Fixes-Admin App
+------------------- 
+
+  *) Made the labels on the "My Store Status" Panel display in the selected language rather 
+     than the store's default language.
+
+  *) Save/Cancel buttons now enabled correctly now when tax rate droplists are modified.
+
+
+Bug Fixes-App
+-------------
+
+  *) Fixed DownloadInvoiceAction to remove java.lang.IllegalStateException: 
+     getOutputStream() has already been called for this response when
+     downloading a PDF file.
+  
+  *) Fixed DownloadInvoiceAction & AdminEngineMgr to function correctly when the engine is
+     being reached through the SOAP APIs.
+  
+  *) Modified MainLayout.jsp to avoid Cannot find bean: "konakartKey" in 
+     any scope exception caused by crawlers.
+
+  *) Null check added to Zones shipping module to prevent null exception if 
+     zone countries configuration value becomes null.
+
+  *) New custom fields added in ver 5 (custom 6 - 10, 1-2Dec, 1-2Int) weren't
+     getting reset in the resetCustomSearchFields() private method of the 
+     application productMgr.
+
+  *) The automatic deletion of expired gift certificates wasn't being managed
+     properly when a customer had more than 1 certificate belonging to the same
+     product id.
+  
+Backwards Compatibility Alert
+-----------------------------
+   
+  *) By default KonaKart is now configured to use these ports in tomcat's server.xml file:
+     Port             Old       New
+     Server           8005      8785    Change to avoid clash with default tomcat port
+     HTTP Connector   8780      8780    No change
+     HTTPS Connector  8443      8783    Change to avoid clash with default tomcat port
+     AJP Connector    8789      8789    No change 
+     
+     Note that the upgrade script modifies the HTTPS port configuration variable (called 
+     'SSL_PORT_NUMBER') in the configuration table if and only if it is currently set to 8443 
+     otherwise it remains unchanged.
+     Also, the upgrade script modifies the ADMIN_APP_LOGIN_BASE_URL configuration variable in
+     the configuration table to use the new HTTPS port but only if the value is currently the 
+     default which is 'https://localhost:8443/konakart/AdminLoginSubmit.do' 
+
+
+Changes with KonaKart 5.0.0.0 - Released 06-Jun-2010
+====================================================
+
+New Features
+------------
+  
+  *) Reward point functionality has been added so that customers can be awarded points
+     for buying products, registering, writing reviews etc. These points can be redeemed
+     during the checkout process and a customer can view a statement of his recent 
+     point transactions after logging in. An administrator can manage a customer's points.
+
+  *) Support for recurring billing. Payment Schedule and Subscription objects have been
+     introduced to support recurring billing natively using a KonaKart batch or through 
+     a payment gateway that manages the billing process at regular intervals.
+     
+  *) Added a number of extra custom attributes to the product object including integers
+     decimals. All fields can be used for searching and sorting. Expiry date has also
+     been added.
+
+  *) Added additional telephone number to customer. Added telephone and eMail to address.
+     These attributes have been added to the address format template.
+
+  *) The language of the store front application is saved in a cookie so that even non
+     logged in customers return to the application in their preferred language. 
+  
+  *) Added a locale attribute to customers and orders to allow emails, especially from 
+     the admin app to be sent out in the correct language.
+
+  *) WYSIWYG editor added to the Admin App for editing product descriptions.
+
+  *) Upgraded to Google GWT 2.0
+
+  *) Added a refresh button to the reports panel of the Admin App
+  
+  *) If a logging properties file isn't found on the classpath, rather than giving a null exception,
+     KonaKart now initialises the log4j system with a set of default logging properties. 
+  
+  *) Country objects returned by the getAllCountries() API call are now fully populated.
+
+  *) Eclipse project supplied for customizing the One Page Checkout GWT code
+
+  *) Now possible to set the first day of the week on the Calendar Popup widget.
+
+  *) Made it possible to internationalise the few remaining aspects of the Admin App.
+     To take advantage of these you will have to update your AdminMessages_XX.properties
+     file for your own locales.
+
+  *) Now possible for a customer to use a gift certificate and a promotion code at the same time.
+
+  *) Added new Struts Validator to the storefront application to avoid XSS injection during 
+     the submission of forms.
+  
+  *) Added a drop list and upload button to the customer communications panel of the Admin App
+     to allow you to select templates and upload new ones. The templates are now stored in 
+     a different directory for each store in a multi store environment.
+  
+  *) Modified the Edit Product panel in the Admin App to make it easier and more intuitive
+     to upload images. Also added upload button for digital downloads.
+   
+  *) Improved I18N for the Admin App to allow decimal numbers such as prices to be inserted 
+     using other characters as a decimal point. i.e. a comma.
+
+  *) Added order number to the returns panel of the admin app to allow you to search for 
+     returns based on the order number and not just the order id.
+  
+  *) Added a config variable in order to automatically enable a product when its quantity
+     is changed to a value greater than 0 through the admin app API.
+
+  *) OrderTotal modules can now obtain a list of the order total modules that have already
+     been called.  
+
+  *) Upgraded to version 1.4 of Solr.
+
+  *) Invoices can now be created in PDF format and can also be attached to order confirmation 
+     emails.  Invoices can also be viewed from both the storefront application and the Admin App.
+
+  *) Added search rules for searching for products and other objects through the application
+     and admin app APIs. The rules allow you to easily define whether and where, wild cards should
+     be added. The admin app has a new properties file where default wild card settings can be 
+     defined for the various panels within the admin app. 
+
+  *) A new mode of operation is available for the Edit Customer panel of the Admin App to 
+     allow you to define that certain roles may edit only "external" customer details.  This 
+     is useful for the cases where customers are actually managed outside of KonaKart.  It
+     makes it possible for the Admin User to edit only the Customer Group, the Newsletter
+     subscription, the state (enabled/disabled) and the customer type (admin/customer/default).
+ 
+  *) Added a config variable that controls whether customer Ids are displayed on the edit
+     customer panel.  Customer Ids are now shown as floatover text on the Customers Panel. 
+
+  *) New Netpay International payment gateway module added.
+
+  *) New eWay Australia payment gateway module added.
+  
+  *) Product importer/exporter modified to import and export using UTF-8 encoding.
+  
+  *) Improvements to the installer - automatic discovery of current java environment improved
+     and extra validation to check the selected java runtime environment is valid.
+  
+ 
+Bug Fixes-Admin App
+------------------- 
+
+  *) Links on the right hand side of the status page weren't working.
+  
+  *) edit review and delete review links on Edit Product panel weren't working
+
+ 
+Bug Fixes-App
+-------------
+
+  *) Added a timestamp to paging links to avoid paging expired result sets that may be 
+     accessed by using the browser back button.
+  
+  *) Fixed a bug when searching for products using Solr. Products under multiple categories
+     being searched for "by category" were not being found.
+   
+  *) Latest products, random specials and random new products were not being translated when
+     the language was changed.
+  
+
+Backwards Compatibility Alert
+-----------------------------
+   
+  *) The velocity templates are no longer stored directly under the WEB-INF/classes
+     directory. They are now stored under the installation home directory in a 
+     the /templates/store_id/ directory structure where store_id is the id of the 
+     store and defaults to store1 in a single store environment.   It is possible to 
+     move these to any other location so long as you update the TEMPLATE_BASE_DIRECTORY
+     to point at the new location.
+ 
+
+  *) In addition to moving the velocity templates, they are all (those from the 
+     konakart and konakartadmin webapps) now grouped together in the same location.   
+     This resulted in a conflict of names where the EmailNewPassword_en.vm existed 
+     in both the konakart and the konakartadmin webapps.   Therefore the one from 
+     konakartadmin has been renamed to be EmailNewPasswordAdmin_en.
+
+
+Changes with KonaKart 4.2.0.0 - Released 11-Jan-2010
+====================================================
+
+New Features
+------------
+  
+  *) The store front application has been re-worked to give it a more modern look and
+     feel including multiple images per product. The icons of the Admin App have also 
+     been replaced to give a fresher look.
+
+  *) Internationalization – The language of the admin app may now be changed dynamically.
+
+  *) The Enterprise version of KonaKart now contains sophisticated marketing functionality
+     that allows you to capture customer data as the customer uses your KonaKart
+     eCommerce store; and to use that data within complex expressions in order to show
+     dynamic content, activate promotions and send eMail communications.
+
+  *) Gift Certificates are now supported. Gift Certificate products may be connected 
+     to any type of promotion and activated through a coupon code contained within the 
+     certificate.
+ 
+  *) New functionality to allow digital download products (.txt and .pdf) to be indexed
+     in the SOLR search engine so that they may be found by doing a product search using
+     search keywords.
+  
+  *) New snippet functionality that returns text fragments surrounding search keywords
+     so that the context of the search result can be determined. Useful especially
+     for indexed digital download documents.
+
+  *) The Enterprise version of KonaKart allows products to have an unlimited number of prices
+     based on a product catalog id.
+  
+  *) A KonaKart product now has an average rating attribute that can be used in a search
+     filter and to order the products returned. A batch job is supplied to set the average 
+     rating based on all of the reviews present for a product. 
+
+  *) Added dateAvailable to the search constraints for products.
+  
+  *) Tag and Tag Group Maintenance has been moved to the Products section of the Admin App. 
+     Also a new Marketing section has been added.
+  
+  *) Custom Validation enhanced for the Admin App to include a wider selection of attributes.
+
+  *) Added API calls to allow the paging of wish list and gift registry items.
+  
+  *) Added a shipping discount promotion.
+
+  *) Added an EmailIntegrationMgr which provides a hook to allow you to look up an eMail 
+     address from an external system.
+  
+  *) Ability to specify whether or not to use wildcard flags and a LIKE or EQUALS search 
+     when searching for customers based on their email address (Admin API).
+ 
+  *) Module parameters can now be masked from clear view (i.e. they show "******") in the 
+     Admin App with the setting of "password" as the set_function in the configuration
+     table.
+
+  *) New MoneyBookers payment gateway module added (from a contribution by Chris Derham 
+     of Atomus Ltd).
+  
+  *) The getSpecialsPerCategory() API call (app and admin app) has been given an extra 
+     attribute to determine whether or not to search within sub categories. 
+  
+  *) The product search object has been given an extra attribute to configure whether
+     the description should be returned for each product.
+   
+  *) The Velocity template engine can now be configured through an external properties file.
+
+  *) Upgraded to Google GWT 1.7.
+ 
+  
+Bug Fixes-Admin App
+------------------- 
+
+  *) Mail subject is now encoded into UTF-8.
+
+  *) Products in multiple categories are no longer deleted when deleting one of their
+     categories. Also they are not moved to the parent category if they belong to another
+     category.
+
+  *) Upload of product images in Shared Customers mode wasn't working properly.
+  
+  *) Bug fixed in updateConfigurationGroup Admin API call where booleans were not handled
+     correctly (this call was not actually used in KonaKart prior to 4.2.0.0).
+ 
+ 
+Bug Fixes-App
+-------------
+
+  *) Mail subject is now encoded into UTF-8.
+
+  *) The HTML escaping of reviews (when being inserted) was escaping too 
+     many characters, making the review un-readable from the admin app. Now only the 
+     standard HTML control characters are being escaped (i.e. <, >, &, ", ').
+  
+  *) Modified a divide operation in the saveOrder method call to avoid an exception during
+     the customization of KonaKart if order prices were being modified without specifying
+     the scale.
+
+  *) The category tile was sometimes showing the incorrect category when viewing the details
+     of a product that belongs to multiple categories.
+
+  *) When showing products belonging directly to a parent category that has also sub 
+     categories, the manufacturer drop list selector was showing the manufacturers
+     of the products in the sub categories and not those of the products in the
+     parent category.
+
+  *) The manufacturer filter drop list was not being reset when transitioning from 
+     viewing a category with products that have multiple manufacturers, to a category
+     that has no products.
+ 
+  *) Validation added to check for valid Country Ids when adding an address to a customer
+
+  *) Coupon codes are now stored in the session so only have to be entered once.
+
+  *) Secret key generation for asynchronous payment modules now works for load balanced
+     systems.
+  
+  *) The quantity of a bundled product was not being calculated correctly.
+
+  
+Bug Fixes / Enhancements - Importer / Exporter 
+----------------------------------------------
+
+  *) Custom Validation settings defined for the Admin App are also used during imports.
+  
+  *) Improved support for the loading of larger data sets.
+  
+  *) Improved matching of records to avoid import of duplicate records.
+  
+  *) Support added for import and export of WishLists and WishList Items.
+  
+  *) Support added for all newly-added entities supported in XML_IO utility (including
+     Customer Tags, Expressions etc).
+
+  *) Bug fixed in the import of ConfigurationGroups - it was creating duplicates.
+
+
+Backwards Compatibility Alert
+-----------------------------
+   
+  *) The application and admin application method getSpecialsPerCategory()
+     has been given an extra attribute in order to search or not search
+     within sub categories.
+
+  *) The PaymentInfo object no longer contains a Secret Key attribute. The
+     method to generate a secret key is now called directly from the payment
+     module when required.
+
+ 
+Changes with KonaKart 4.1.0.0 - Released 28-Aug-2009
+====================================================
+
+New Features
+------------
+  
+  *) Added shared products mode to multi-store. This feature allows you to add a product
+     to multiple stores but only have to manage one copy of the product in the admin app.
+     The product price may differ between the stores.
+  
+  *) KonaKart now supports Gift Registries. An implementation for wedding lists has been added 
+     to the store front appplication.
+
+  *) All client side exceptions shown to the customer are now also logged. 
+  
+  *) New API call to retrieve Categories to Tag Groups.
+  
+  *) Save button enabled in Admin App without the need to tab off fields. Improves 
+     consistency of behaviour across all panels of the Admin App.
+
+  *) Added USPS and USPS International payment gateways
+
+  *) Various improvements to the XML Import/Export feature providing greater flexibility in 
+     defining which objects to import/export (Enterprise Extensions only).
+     Additional command line arguments have been made available with some example scripts to
+     demonstrate the new features.
+  
+Bug Fixes-Admin App
+-------------------  
+
+  *) Fixed Calendar widget so that it expands to 6 rows where required.
+
+  *) A number of minor bugs fixed where search filters and back buttons were being lost under 
+     certain conditions.
+
+Bug Fixes-App
+-------------
+
+  *) Fixed a bug where breadcrumbs were never resetting. It could be reproduced by clicking
+     the add address button in the My Accounts section and then the back button.
+
+  *) The assignment of zones to payment and shipping gateways was not working properly. The
+     defined zone was not being detected. Now for example, you may want to assign a USA zone
+     to the USPS gateway so that it doesn't get called for non US destinations.
+
+  
+Changes with KonaKart 4.0.0.0 - Released 05-Jun-2009
+====================================================
+
+New Features
+------------
+  
+  *) Upgraded to Axis 1.4
+
+  *) 3 custom fields added to zones table
+  
+  *) Support for multi-currency. A customer can now view and search for products 
+     in a currency different to the default currency.
+
+  *) Added cookie management to remember guests and their cart contents even if they haven't registered.
+  
+  *) Added many extra Application API calls that include an extra "options object". The purpose of this
+     object is to pass the catalog id to the eCommerce engine so that the product manager may be specialized 
+     to retrieve the product price and quantity from an external source based on the catalog id.
+  
+  *) Enhanced product select dialogs in Admin App. Can now include extra attributes based on a template
+     and can search by SKU as well as by a keyword.
+   
+  *) Added an API call to the Admin App called setProductQuantity() and getProductQuantity() to change 
+     the quantity of a product without having to retrieve the product, edit it and save it. A panel has
+     also been added to enable power users to perform this action efficiently.
+    
+  *) Added custom fields to the session table.
+
+  *) Two new API calls, addCustomDataToSession() and getCustomDataFromSession() have been added to the Admin
+     App and Application APIs.
+
+  *) Added the ability to retrieve customers using custom fields as search criteria.
+
+  *) Added a Date Available attribute to the Products_quantity table so that each product variation
+     can have a different available date.
+
+  *) Added an API call to the Admin App called setProductAvailability() and getProductAvailability() to change 
+     the available date of a product without having to retrieve the product, edit it and save it. A panel has
+     also been added to enable power users to perform this action efficiently.
+
+  *) Added the last modified date to an Admin Product. The creation and last modified dates are now visible 
+     from the Admin App.
+  
+  *) For digital download products, added a Max Number of Downloads attribute and a
+     Max Number of Download days attribute. If set, these values override the global values
+     set using configuration variables.
+
+  *) Added a Stock Reorder Level attribute to each product object. If set, this value overrides
+     the global value set using a configuration variable.
+
+  *) Custom Validation enhanced for the Admin App to include a wider selection of attributes
+
+  *) Added an order tracking attribute to the order object. Added extra callouts to the 
+     OrderIntegrationMgr to edit the order before it is saved and a specific one to add
+     the tracking order before the order is saved.
+  
+  *) Added a "Can Order When Not In Stock" attribute to each product. If set, these values override 
+     the global values set using configuration variables.
+  
+  *) Added an invisible attribute to categories so that they do not appear in the application when 
+     invisible.
+  
+  *) Added SKU attribute to Basket and OrderProduct objects.
+
+  *) Added State attribute to OrderProduct that defines the availability state of the product when the order 
+     is created.
+
+  *) Scheduling feature added (Enterprise Extensions only) using Quartz.  Includes three batch jobs: 
+     RemoveExpiredCustomers, UnpaidOrderNotification and ProductAvailabilityNotification.
+
+  *) Added the ability to clone stores in a multi-store configuration (Enterprise Extensions only) 
+  
+  *) New BIRT report - ProductsToReorder.
+  
+  *) Added support to integrate the KonaKart Admin App into Liferay.
+  
+
+Bug Fixes-Admin App
+-------------------
+    
+  *) Sorting by "Logons" and "Last Logon" gives an error with Oracle.
+   
+  *) Non registered customers are no longer displayed in the customers section. These are 
+     created when KonaKart is configured to allow checkout without registration; and were 
+     being inadvertently displayed in the customer list. A parameter has been added to the 
+     AdminCustomerSearch object in order to programmably display or not display the non 
+     registered customers.
+  
+  *) The printing of the order invoice and packing slip wasn't working. 
+
+  *) Fix to the SQL generated to set correct URL values for the default chart on the 
+     status page of the Admin App.  (Only a problem on Linux with DB2, Oracle and MSSQL)
+
+  *) Fix to the SQL generated to remove quotes around floating point values in currency 
+     inserts.  (Only a problem with Oracle databases that do not convert strings such 
+     as '1.306' to floats correctly).
+
+  *) Corrections to two BIRT reports (only a problem under Oracle, DB2 and MS SQL).
+     TopCustomers.rptdesign and TopProductsList.rptdesign.
+
+  *) Fix to admin app to display prices when comma is selected as the decimal point.
+
+  *) Customer type search attribute not working in getCustomers() and getCustomersLite() API calls.
+
+ 
+Bug Fixes-App
+-------------
+
+  *) Changed the message catalog to remove the text : I am a returning customer. If you have already 
+     shopped at our store but never registered, please click on the Password Forgotten link below 
+     and we'll send you a password. A non registered customer needs to go through the registration process
+     so the text is wrong.
+
+  *) getCurrencies() API call was not using search criteria correctly.
+
+
+Bug Fixes Google Base Interface 
+-------------------------------
+
+  *) Update required due to a change in the Googe Base API.
+     This fixes the "You must specify an id for an item" error message.
+
+
+Backwards Compatibility Alert
+-----------------------------
+   
+  *) The application API call getProductQuantity(String encodedProductId) now returns a 
+     ProductQuantityIf object rather than an int. The reason is to return the Date Available as 
+     well as the quantity.
+
+
+Changes with KonaKart 3.2.0.1 - Released 30-Mar-2009
+====================================================
+
+New Features
+------------
+  
+  *)
+
+Bug Fixes-Admin App
+-------------------
+    
+  *) Fix to the SQL generated to set correct URL values for the default chart on the 
+     status page of the Admin App.  (Only a problem on Linux with DB2, Oracle and MSSQL)
+
+  *) Fix to the SQL generated to remove quotes around floating point values in currency 
+     inserts.  (Only a problem with Oracle databases that do not convert strings such 
+     as '1.306' to floats correctly).
+
+  *) Corrections to two BIRT reports (only a problem under Oracle, DB2 and MS SQL).
+     TopCustomers.rptdesign and TopProductsList.rptdesign.
+
+  *) Sorting by "Logons" and "Last Logon" gives an error with Oracle.  
+
+  *) Print of packing slip and order invoice wasn't working. 
+
+  *) Fix to admin app to display prices when comma is selected as the decimal point.
+
+
+Bug Fixes-App
+-------------
+
+  *) Changed the message catalog to remove the text : I am a returning customer. If you have already 
+     shopped at our store but never registered, please click on the Password Forgotten link below 
+     and we'll send you a password. A non registered customer needs to go through the registration process
+     so the text is wrong. 
+
+Bug Fixes Google Base Interface 
+-------------------------------
+
+  *) Update required due to a change in the Google Base API.
+     This fixes the "You must specify an id for an item" error message.
+
+
+Changes with KonaKart 3.2.0.0 - Released 01-Feb-2009
+====================================================
+
+New Features
+------------
+  
+  *) Upgraded to BIRT 2.3.1
+
+  *) Addition of Wish List functionality to engine and application.
+
+  *) Addition of an Order Number attribute to the order object. This number may be set by 
+     custom business logic when the order is saved.
+
+  *) In multi-store single db mode, product searches can be performed across stores, providing 
+     shopping mall functionality.
+
+  *) In multi-store single db mode, custom functionality can be executed when new stores are
+     added to a mall, or store definitions are updated.  (The default class for this hook is
+     com.konakartadmin.bl.AdminStoreIntegrationMgr).
+  
+  *) The KonaKart role object now has 5 custom fields.
+
+  *) Upgraded to Google GWT 1.5.3
+
+  *) Added visual aid to tabs of insert / edit product panel to make it easier to identify
+     what data is missing or doesn't validate.
+
+
+Bug Fixes-Admin App
+-------------------
+    
+  *) Prevent users from running reports from the Admin App once their session has expired.
+     Previously no check was made to check to see if the session had expired before 
+     reports were executed.  Now, if the session has expired when the Admin App user 
+     attempts to run a report, he is logged out automatically.
+
+  *) The method getOrderForOrderId() was not populating the formattedTotalIncTax attribute. 
+
+  *) Put in a retry when creating sessions to avoid login failing due to duplicate sessions.
+
+
+Bug Fixes-App
+-------------
+
+  *) Fixed a bug when creating the encoded product id for a basket item. 
+     The id used to depend on the order of the options which could have caused a problem 
+     if the same item with similar options was added twice but with a different ordering 
+     of the options in the opts array.The system wouldn't have recognised it as 
+     being the same item.
+
+  *) Deletion of product attributes was causing null pointer errors when doing repeat orders 
+     and for products that had already been added to the basket.
+
+  *) Put in a retry when creating sessions to avoid login failing due to duplicate sessions.
+
+  *) Fixed some reflected XSS vulnerabilities.
+   
+  *) Fixed caching problem for random product tiles. The price with tax wasn't getting updated when 
+     a user from another tax area (different to the store tax area) logged in. The problem was
+     only visible when KonaKart was configured to display prices including tax.
+  
+  *) Product belonging to more than one category was showing up multiple times in the best-seller
+     list. One time for every category.
+
+
+Backwards Compatibility Alert
+-----------------------------
+   
+  *) SetConfigurationValue in the Admin API has changed.   This now requires an extra parameter.
+     The extra parameter is the session Id.  This has been modified to ensure that changes
+     to configuration values are only made by callers with a valie sessionId.  (SessionIds are
+     returned from successful logins).   
+
+
+Changes with KonaKart 3.0.1.0 - Released 07-Oct-2008
+====================================================
+
+New Features
+------------
+  
+  *) Multistore. One instance of KonaKart can now manage multiple stores.
+
+  *) Fully indexed search using the Jakarta Lucene search engine. As well as being very fast regardless of the size
+     of your catalog; it caters for misspellings, synonyms, plurals and alternate spellings.
+  
+  *) New payment modules Elink and BluePay
+
+  *) New FedEx shipping module.
+
+  *) Google Analytics Integration.  (See User Guide for details on how to configure this feature)
+
+  *) Added new eMail API calls to application and deprecated the old ones. The new API calls have the following advantages:
+        - They allow you to add an array of name / value pair objects in order to pass custom data to 
+          the Velocity templates
+        - They allow you to choose a template name. In the case of the OrderConfirmation eMail, 
+          three different templates are now used for when the order is received, when payment is received 
+          and for when the payment transaction is not successful.
+        - More standard data such as a fully populated customer object has been added to the VelocityContext.
+        - In all cases, the eMail subject is now read from the first line of the template.
+
+  *) Added new eMail API calls to the Admin App to allow the addition of an array of name / value pair objects 
+     in order to pass custom data to the Velocity templates.
+
+  *) Added ability to save credit card details in an encrypted format. The details can be edited from the Admin App.
+
+  *) New configuration flag for the Admin App to enable or disable the initial search that is performed on the 
+     Customers Panel.
+
+  *) New configuration flag for the Admin App to control the behaviour of the clear button on the Customers Panel.  If set 
+     to true the clear button will clear both the search criteria AND any current results;  if set to false, the clear 
+     button clears only the search criteria.   It is expected that most users will leave this at the default value which is
+     false.
+
+  *) KonaKart is now bundled with Apache Tomcat 6.0.18
+
+  *) The order of product attributes displayed in the application can now be controlled and is identical to the order
+     set in the Admin app when they are created.
+
+  *) Google Base Integration.   Allows you to publish your products in Google Base.
+
+
+Bug Fixes-App
+-------------
+
+  *) Some labels in the application were not getting translated properly into the new language when a language was changed.
+     The labels in question are all of those set from ActionClasses and not those set in the JSPs (mainly the breadcrumbs). 
+
+  *) The Category tile was not getting translated into the new language after a language change, until it was clicked on.
+
+  *) If all categories had the last_modified date set to null, the server side caching wasn't working correctly. It would 
+     always re-calculate the category tree. 
+   
+  *) Digital download records weren't being deleted when a product was deleted. Also digital downloads were being returned
+     by the Application API call even if the product had been deleted.
+
+  *) Code has been added to not call a payment gateway if the total of the order is zero.
+
+  *) The behaviour of checkout without registration has been modified to prevent privacy issues. If a registered user attempts 
+     to checkout without logging in, the system detects that the eMail address already belongs to a registered user and so 
+     asks for his password  rather than proceeding to checkout and overwriting data belonging to the registered user.
+  
+  *) The URLs generated when selecting products for a category or for a manufacturer could not be copy and pasted into a 
+     new browser to produce the same output.
+ 
+  *) In the most detailed Auditing Mode, when running with DB2 or Oracle, the object_to_string column was insufficient to
+     hold the highest level of detail.  In 3.0.1.0 the object_to_string column as been altered (for DB2 and Oracle) to hold 
+     all auditing data.
+
+  *) Removed unused javascript from LoginBody.jsp
+
+  *) If directly after viewing a category with tags, you switched to one with no products, the tags of the previous category 
+     were being shown.
+
+
+Bug Fixes Importer / Exporter 
+-----------------------------
+
+  *)  Invisible products weren't importing or exporting properly       
+
+Bug Fixes One-Page-Checkout GWT Dev Kit 
+---------------------------------------
+
+  *)  Missing loader.gif added to development kit.  
+     
+
+Bug Fixes Portlets 
+------------------
+
+  *)  redirect=true has been added to a number of forward statements in struts-config.xml. This fixes a bug which didn't
+      allow the browser back button to be used in all cases. Sometimes it would navigate back to an empty portal. 
+ 
+  *)  <action path="/ShowProductsForManufacturer"/> has been added to struts-portlet-config.xml to fix a bug where the
+      link to "other products" from the manufacturer tile wasn't working. 
+
+  *)  Fixed product links on EditCartBody.jsp. These links were using the struts nested tag and weren't getting translated
+      by the portal bridge. They have been changed to use the struts html tag.
+
+
+
+Backwards Compatibility Alert
+-----------------------------
+   
+  *) KonaKart engines have new constructors to cater for multistore. In some cases the old constructors have been deprecated.
+
+
+
+Changes with KonaKart 2.2.6.0 - Released 28-May-2008
+====================================================
+
+New Features
+------------
+
+  *) Added support for bundles. Bundle products can be defined in the Admin App. The quantity of the bundle product 
+     is calculated automatically and tools are provided to calculate the cost (optionally using discounts) and the weight.
+     In the application, the bundled products are available in the product detail screen, the quantity available is
+     calculated and the quantity in stock of the bundled products is decremented automatically when an order is processed.
+
+  *) Added product tags and tag groups to enable detailed product searches based on the tags. Tag groups can be linked
+     to a category in order to display them in a context sensitive manner. i.e. You could link a "Food Type" tag group to
+     a restaurant category in order to select only restaurants that serve vegetarian dishes or spicy food etc.
+
+  *) Added an application feature whereby any previous order can be repeated with a single click.
+
+  *) New application feature to see shipping costs and promotions on cart details page without needing to
+     register or log in.
+  
+  *) New application feature to log in automatically after registration.
+
+  *) New customization framework for modifying / supplementing the KonaKart engine behavior.  This provides 
+     hooks that are easy to program that allow you to customize the KonaKart engines. See ENGINE CUSTOMIZATION FAQ
+     for more details.
+
+  *) Two new API calls on both the Application API and the Admin App API:
+         String custom(String input1, String input2)
+         String customSecure(String sessionId, String input1, String input2)
+     These allow you to add your own engine interfaces to enhance the behavior of the KonaKart engines.
+     See ENGINE CUSTOMIZATION FAQ for more details.
+
+  *) Added 10 custom panels that display a predefined URL in a frame. This feature allows you to extend the 
+     Admin App by adding your own administration functionality outside the standard Admin App. 
+
+  *) Added the ability to program a button on the Admin App Returns Panel to call your own custom URL. 
+     An example of its use could be to call an application that processes credit card refunds through the 
+     payment gateway.
+ 
+  *) When AdminOrderProducts are returned by the Admin API they now have the optionId and valueId attributes of 
+     the options populated, and not just the name and value.
+
+  *) UTF-8 encoding now used for the mail sent out from the Email command in the Admin App allowing double-byte
+     characters to be used in customer emails.
+
+  *) The product search functionality in the Admin App has been enhanced.
+  
+  *) Added new method addToBasketWithOptions(). Currently there is one option that allows you force a product
+     into a new basket item even if an identical product already exists. The default behaviour is to just update
+     the quantity of the existing item.
+
+  *) Added new method createOrderWithOptions(). Currently there are two options: One allows you to automatically copy 
+     all of the basket custom fields to the orderProduct custom fields which are generated from the basket items. 
+     The other allows you to use the default customer to generate a temporary order for customers that haven't registered 
+     or logged in. The order totals from the temporary order are used to display shipping costs and promotions on the
+     cart details page.
+  
+  *) Added custom fields to cartItem.
+
+  *) In the Admin App added a button to select the customer from the orders panel.
+
+  *) KonaKart version number and build date has added to the meta data in the Admin App (KonakartAdmin.html file) - this
+     provides a convenient way to find out which version you are running.
+
+
+Bug Fixes-App
+-------------
+  
+  *) Fixed bug to clear the order history list when a customer logs out.
+   
+  *) Fixed array out of bounds exception when there were no categories in the system.
+  
+  *) getShippingQuote() was throwing a null pointer exception if the shipping module didn’t exist.
+
+  *) getPaymentDetails() was throwing a null pointer exception if the payment module didn’t exist.
+  
+  *) UpdateBasket was not updating the custom fields.
+
+  *) When the session was timing out, the user was receiving an exception in the application.
+
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) Previously there were two Application API calls called "getPaymentDetails" (they were overloaded with different
+     parameters).   We have changed the name of one of these calls to getPaymentDetailsPerOrder to avoid having any 
+     overloading in the APIs.   Therefore, if you used...
+         
+         public PaymentDetailsIf getPaymentDetails(String sessionId, String moduleCode,
+            OrderIf order, String hostAndPort, int languageId) throws KKException;
+
+     ... you should change the name of the call to getPaymentDetailsPerOrder()
+
+
+Changes with KonaKart 2.2.5.0 - Released 01-Apr-2008
+====================================================
+
+New Features
+------------
+
+  *) Provided more flexible customer search options in new droplists on the Admin App Customer Panel.  
+     These can also be disabled by using role-based security settings.
+  
+  *) Added the ability to program a button on the Admin App Customer Panel to call your own custom URL. 
+     This button will not be visible unless you define the label to be non-empty in the Admin App Configuration 
+     Panel.
+
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) If the Customer Panel is the one and only panel authorised for a user, it sometimes failed at start-up due 
+     to a race condition.  
+  
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) The database upgrade script sets customers' customers_type to 0 where the customers_type is null.  This indicates
+     that the customer is a normal customer more explicitly.
+
+
+Changes with KonaKart 2.2.4.0 - Released 13-Mar-2008
+====================================================
+
+New Features
+------------
+
+  *) Added a new API call to com.konakart.al.ProductMgr to allow you to set the default order_by
+     for API calls that retrieve arrays of products. Previously the default was set to 
+     "Order by price ascending" and not configurable.
+  
+  *) Added EditOrder(), a new API call for the Admin API. It allows you to edit some order attributes.
+
+  *) Enriched the functionality of the Admin API call, getOrders(), to allow you to search by Custom fields, 
+     Date Added and Date Finished.
+  
+  *) In the Admin App when uploading an image, the directory will now be created if it doesn't already exist.
+
+  *) Added a hook to allow custom credential checking during Login. This allows a company implementing KonaKart to 
+     develop their own credential checking algorithms rather than to use the standard KonaKart implementation.
+     It can also be used to achieve Single Sign On and to connect to an LDAP directory.
+  
+  *) Added a new API call to the AdminEng to return the top level categories.
+
+  *) Added configuration variables to specify whether you want a wildcard ('%') placed before or after text
+     that is entered for searches in the Admin App.   The default will be the pre-2.2.4.0 behaviour of adding
+     wildcard search characters before and after all eneterd search text.
+
+  *) Included "Packing List" and "Invoice" buttons as part of the role-based security system - allows you to 
+     enable or disable these buttons in role definitions.   The default setting is pre-2.2.4.0 behaviour which is 
+     to enable both buttons.
+
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) The lastModified attribute of an order was not being updated when the status of the order was 
+     changed through the Admin API.
+  
+  *) The back button from the edit product panel wasn't always working after uploading an image.
+
+  *) The getCustomers() API call wasn't instantiating the last modified date for the customer objects.
+
+  *) Unable to control the visibility of the Reset Password button on the Customers Window.
+
+
+Bug Fixes-App
+-------------
+
+  *) Fixed bug to allow the DataDescriptor to be set to null for most API calls that retrieve products and reviews.
+     The Javadoc was already reporting this behaviour although the engine was throwing an exception when
+     finding a null value.
+
+
+Changes with KonaKart 2.2.3.0 - Released 12-Feb-2008
+====================================================
+
+New Features
+------------
+
+  *) Added a new product type : "physical product with free shipping". This allows you to set 
+     free shipping on a product by product basis in the Admin App. There is also a new Shipping 
+     Module called FreeProduct which needs to be installed. This module will return a shipping quote
+     of zero if it detects that the physical products within the order all have free shipping.
+  
+  *) Added user configurable length checking for certain product attributes entered through the Admin App.
+
+  *) Added customer groups. These can be maintained through the Admin App. Customers may be associated 
+     to any one customer group. i.e. Wholesale / Retail customers.
+
+  *) When the customer group of a customer is changed through the Admin App, a template based eMail 
+     may automatically be sent to the customer. This is a useful feature for the case where a customer
+     is in a temporary group waiting for approval. i.e. A customer may sign up as a wholesale customer 
+     but needs to be approved by an Admin person. The approval /denial process involves moving the customer
+     to the wholesale or retail group. A different template may be picked up depending on which group 
+     the customer is moved to.
+
+  *) Added multiple prices for product. The product object (and product attributes) has an extra 3 price
+     fields to store alternative prices such as wholesale price and MRP. The priceId attribute of the 
+     customer group determines which prices are used for any one customer. This enables you to display
+     different prices to different customers depending on which customer group they belong to.
+
+  *) Added a new engine API call to enable you to send any template based eMail to a customer.
+
+  *) Added extra features to the Customers panel in the Admin App:
+     - You can now search for customers by street, city, postcode and customer group as well as by name
+       type and enabled / disabled.
+     - You can display the address of the customer through a configurable template that controls what address
+       fields are displayed and the formatting of these fields.
+
+  *) Added functionality in Admin App to select a customer and open up a new browser window displaying the
+     KonaKart eCommerce application, automatically logging in the selected customer. This is a useful feature 
+     for call center users who may need to accept telephone orders. It allows them to log in on behalf of a customer 
+     without requiring the customer's credentials and to perform any transaction that the customer could normally
+     perform.
+
+
+  *) Added a dynamic gif to indicate that GWT code is loading. It appears in the checkout section of the application 
+     and when the Admin App is launched.
+
+
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) The exporter tool was reporting an exception when exporting products directly under a first level category.
+
+  *) When a new language was added to the system, the admin tool wasn't allowing you to add a new order status name
+     for that language, to an existing order status.
+
+
+Bug Fixes-App
+-------------
+
+  *) Removed a couple of hard coded labels from ProductsBody.jsp
+
+  *) Fixed a precision problem in the ProductDiscount OrderTotal module
+
+  *) Records from the products_to_products table weren't being deleted when a product was deleted.
+  
+  *) If a new promotion was inserted after a promotion containing rules, the new promotion was being 
+     initialised incorrectly.
+
+  *) Fixed a bug where Category Tile was showing no categories when going directly to a page such as 
+     http://localhost:8780/konakart/PrivacyNotice.do as the entry point to the application.
+  
+  *) Fixed a bug where the url used for going to the product detail page, would not work if it was the 
+     entry point to the application.
+
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) Removed deprecated method com.konakart.al.CategoryMgr.setCurrentCatAndUpdateProducts(int catId). The one to 
+     use instead is com.konakart.al.CategoryMgr.setCurrentCatAndUpdateProducts1(int catId). Removed CategoriesTile.jsp.
+     CategoriesTile1.jsp should be used.Removed com.konakart.actions.SelectCategoryAction().           com.konakart.actions.SelectCategoryAction1() should be used instead.
+
+
+Changes with KonaKart 2.2.2.0 - Released 22-Jan-2008
+====================================================
+
+New Features
+------------
+
+  *) Support for JSR 168 portlet specification to enable you to run KonaKart within a portlet.
+
+  *) Checkout without registration
+
+  *) Added customer notifications to the Admin App. You can send template based eMails to all
+     customers, to all customers who have requested to receive the newsletter and 
+     to customers that have asked to be notified about any updates for a particular product.
+
+  *) UPS shipping module
+
+  *) Build kit to produce JSR-168 compliant portlet WAR
+
+  *) When the state of an order is changed through the Admin API / Admin App, a
+     unique email velocity template can be defined for each order state.
+    
+  *) Added the functionality to order products in the application API using the custom fields.
+
+  *) Added the functionality to search for products in the application API using the custom fields.
+
+  *) Added functionality to AdminCustomerSearch to search for customers with 
+     newsletter and notified products
+
+  *) All Application API calls that return an array of products now return all custom fields. 
+     Previously only custom1 and custom2 were returned.
+  
+  *) New interfaces for the Admin API:  setCustomerPassword, insertProductNotification, 
+     deleteProductNotification and getCustomerForEmail
+
+  *) Added custom fields to OrderProduct and Basket objects.
+
+  *) Improvements to the JavaDoc
+
+  *) One page checkout code and build file included in KonaKart download packages
+
+Bug Fixes-App
+-------------
+
+  *) Option prices weren't being displayed in the drop list when value was between 0 and 1.
+
+
+
+Changes with KonaKart 2.2.1.0 - Released 06-Dec-2007
+====================================================
+
+New Features
+------------
+
+  *) Redesign of UI to make it more "skin-friendly". KonaKart now comes with 4 different skins.
+
+  *) Capability to add additional mail properties in a new configuration file.  This allows you, for
+     example, to use SMTPS mail gateways with authentication, and at defined ports.  
+
+  *) Configurable log file directory for storage of diagnostic log files.
+
+  *) Two new payment gateways:  YourPay and PayJunction
+
+  *) Added support for MySQL 4.1 
+
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) Tax Rates, Tax Areas and Tax Classes - No Save button on inserts after deleting all records
+
+  *) Edit Product, Edit Manufacturer, Edit Category were showing incorrect language data a 
+     language was deleted without deleting the descriptions for this language. 
+  
+  *) Delete product. The product is now deleted from all customer's baskets. 
+
+
+Bug Fixes-App
+-------------
+
+  *) Tax wasn't being calculated for the "All Countries" and "All zones" cases.
+
+  *) Filter by manufaturer wasn't working when selecting all manufacturers after having filtered by 
+     a single manufacturer.
+
+  *) Orders could not be saved for Countries with names longer than 32 characters. (A database error
+     inherited from osCommerce)
+
+  *) Orders_Product Model_Name column increased to 64 characters to match orders table.
+
+  *) Struts actions were using some instance variables which may have caused concurrency problems particularly    
+     under heavy load.
+
+  *) Filter of products by price wasn't working correctly for MySQL
+
+
+Changes with KonaKart 2.2.0.8 - Released 15-Nov-2007
+====================================================
+
+New Features
+------------
+
+  *) Change Password capability added to Admin App
+
+  *) Role based security has been enhanced to include API Call granularity.
+
+  *) Digital Downloads are now enabled when changing the state of an order through the Admin App
+
+  *) YourPay payment module
+
+
+Bug Fixes-App
+-------------
+
+  *) Duplicate log4j jar removed
+
+  *) All web.xml files now validate correctly
+
+  *) setClassPath.bat utility in import/export utility corrected (defined an incorrect classpath)
+
+  *) *.gwt.rpc file included in konakart webapp (eliminates warnings in the log about this)
+
+
+Changes with KonaKart 2.2.0.7 - Released 22-Oct-2007
+====================================================
+
+New Features
+------------
+
+  *) Configurable Auditing for Admin App
+
+  *) Role-based security for Admin App
+
+  *) AJAX components upgraded to use the latest GWT release (1.4.60) - provides greater
+     stability and significant performance gains
+
+  *) Support for digital downloads
+
+  *) Added many configuration variables for enabling sending of emails (registration, 
+     order confirmation etc.) rather than one global on / off variable.
+
+  *) Added multiple image support for a product. Every product now supports 4 images.
+
+  *) Added a data comparison field to products. This should contain structured data (i.e. XML) 
+     so that many similar products can be compared, feature by feature.
+
+
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) Reports configuration menu re-instated.
+
+  *) Returns panel stored incorrect item quantity under certain conditions.
+
+
+Changes with KonaKart 2.2.0.6 - Released 06-Sep-2007
+====================================================
+
+New Features
+------------
+
+  *) Admin App is now fully internationalized and can be translated through a message catalog.
+
+  *) Addition of an import / export tool to allow import and export of product data from a file.
+
+  *) Addition of two new payment gateways (USA ePay and Authorize.net). 
+     The credit card details are entered directly into a KonaKart JSP rather 
+     than redirecting to a page belonging to the gateway.
+
+  *) Addition of a returns section to the Admin App to manage product returns.
+
+  *) Through the admin app you can configure a new URL for when switching to SSL. 
+     The previous version only allowed you to configure a new port.
+
+  *) Increased products_model column from varchar(12) to varchar(64)
+
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) FireFox always used to give an error during product image upload although the upload was working.
+
+
+Bug Fixes-App
+-------------
+
+  *) searchForIpnHistory Admin API function caused SQL error on DB2.
+
+  *) Velocity engine was opening and never closing a file handle to the log file every time KonaKart was calling it. 
+     The new default condition is to have no velocity logging.
+
+
+Backwards Compatibility Alert
+-----------------------------
+
+  *) The AdminIpnSearch class has changed (orderId changed from String to int).  
+     This is used in the searchForIpnHistory Admin API call.  
+     Any uses of AdminIpnSearch will need to be updated.
+
+
+Changes with KonaKart 2.2.0.5 - Released 31-Jul-2007
+====================================================
+
+New Features
+------------
+
+  *) Admin App javadoc included in download kit
+
+  *) More source code included in the download kit for the Struts application
+
+  *) Functionality to keep multiple quantities and SKUs of the same product id for different options. Quantities and SKUs can be set through the admin app.
+
+  *) Addition of an "invisible" attribute for the product object. Invisible objects are not normally returned by the API unless specifically asked for by setting an attribute in the DataDescriptor. 
+
+  *) Addition of custom fields to the DataDescriptor object so that products can be filtered using the custom fields. e.g. You can set the value of a custom field to be "local" or "international" . If the value of the same custom field in the data descriptor is set to "local" then only products with the field set to "local" are returned.
+
+  *) In the Admin App a product can be searched for by its SKU.
+
+
+Bug Fixes-App
+-------------
+
+  *) Addition of Javascript in EditCartBody.jsp to validate the quantity of a cart item.
+
+  *) The number of products for a category wasn't getting updated at regular intervals in the category tile.
+
+
+Changes with KonaKart 2.2.0.4 - Released 11-Jul-2007
+====================================================
+
+New Features
+------------
+
+  *) Implementation of AJAX based One Page Checkout functionality
+
+  *) Added support for DB2 and MS SQL Server
+
+  *) Added advanced SEO features
+
+  *) Clickable more detailed breadcrumbs
+
+  *) Added a callback class that gets called whenever an order is made by a customer or when 
+     the state of an order changes due to an event such as a payment gateway callback.
+
+  *) Installer now checks your database connection and, optionally, initialises your database ready to use KonaKart
+
+  *) Added a KonaKart news feed to the Admin App
+ 
+
+Changes with KonaKart 2.2.0.3 - Released 06-Jun-2007
+====================================================
+
+New Features
+------------
+
+  *) Promotions, Coupons & Merchandising
+
+  *) Oracle Support
+ 
+
+Bug Fixes-Admin APP
+-------------------
+  
+  *) Reports are now sorted A-Z,a-z on Linux/Unix as well as on Windows
+
+  *) A few minor bug fixes mainly relative to UI
+
+
+Bug Fixes-APP
+-------------
+
+  *) The shipping modules (Zones.java and Table.java) were not dynamically refreshing the shipping cost 
+     lists when this data was changed through the Admin App. A restart of Tomcat was required.
+
+  *) Added max length checking for customer registration and address and password changes. Previous to this 
+     fix, an exception from the database was shown on the UI if the user attempted to enter a string longer than the database allowed.
+
+
+Changes with KonaKart 2.2.0.2 - Released 07-May-2007
+====================================================
+
+New Features
+------------
+
+  *) Reporting added to KonaKart through the integration of BIRT, the popular Open Source Business Intelligence and Reporting Tool.
+
+  *) Enable / Disable http / https communication, and define port numbers through Admin App. No longer need <security-constraint> section in web.xml
+
+  *) Email sent to warn of low stock level.
+
+  *) Added feature to allow editing of configuration files from the Admin App.
+
+Bug Fixes-Admin APP
+-------------------
+  
+  *) Reviews weren't being deleted when a product was deleted.
+
+Bug Fixes-APP
+-------------
+
+  *) The category tree in the categories tile wasn't getting updated with the current category when a product was clicked on in order to view the product details.
+
+  *) Application forms weren't using UTF-8 encoding.
+
+  *) eMail templates and the eMail engine weren't using UTF-8 encoding.
+
+
+
+Changes with KonaKart 2.2.0.1
+=============================
+
+New Features
+------------
+
+  *) Addition of custom fields for the following entities:
+    -Customer
+    -Product
+    -Order
+    -Manufacturer
+    -Category
+    -Review
+    -Adddress
+     These fields can be maintained through the Admin App and used in
+     the KonaKart application including custom validation.
+
+  *) Used new shortcut icon for uninstall command
+
+  *) Addition of WorldPay payment gateway
+
+  *) More help/examples provided for adding additional modules
+
+New Features-AdminApp
+---------------------
+
+  *) "Insert New Customer" functionality in the Admin App
+
+  *) "Reset Customer Password" functionality in the Admin App
+
+  *) The configuration variable cache of the application can be reset 
+     from the Admin App to avoid having to re-boot the application in 
+     order to pick up configuration variable changes.
+
+New Features-App
+----------------
+
+  *) App can now manage multi levels of categories.
+
+Bug Fixes-Admin App
+-------------------
+  
+  *) Validation on order status names set to a maximum of 32 chars to match d/b
+
+  *) Set line-terminators correctly on properties files on Linux
+
+  *) Modified general behaviour to ensure that the Admin app allows you
+     to work from an empty database.
+
+  *) Special price wasn't getting picked up on new product insert
+
+  *) Products directly associated to a category weren't being moved
+     to the parent category when this category was deleted.
+
+  *) Added missing Back button to Customer Orders panel
+
+  *) Corrected some rounding anomalies with floating point value changes
+
+Bug Fixes-App
+-------------
+  *) Products with quantity = 0 are removed from basket
+
+
+Changes with KonaKart 2.2.0.0 - Released 23-Mar-2007
+====================================================
+
+  *) Major New Feature - The KonaKart Administration Application.
+
+  *) Reduced distribution size by removing some redundant classes.
+
+  *) Restructured the WARs so that properties files are available outside
+     the JARs.  This makes it easier to configure/internationalize Konakart. 
+
+  *) Added extra order status entries to provide more granularity for the
+     state of an order.
+
+  *) Ensured that pages use UTF-8 encoding.
+  
+
+Changes with KonaKart 2.1.0.3
+=============================
+
+  *) Modified the value stored in the final_price attribute of the 
+     orders_products table. It was being saved as the
+     product price (+options) multiplied by the quantity. Now it is saved 
+     as product price (+options). The change was made for osCommerce 
+     compatibility.
+  
+  *) Implemented logic to use expiration date and status of Specials.
+  
+  *) Made refresh interval for client side caches (random special, 
+     random review, random new product) programmable using
+     the configuration CLIENT_CACHE_UPDATE_SECS.
+  
+  *) Fixed bug that created error when there were no specials or no reviews.
+  
+  *) Modified algorithm for searching for the state in the list of Zones. The previous 
+     algorithm was picking out the incorrect zone in some occasions.
+
+
+Changes with KonaKart 2.1.0.2
+=============================
+
+  *) New configuration parameter to define the name of the velocity log
+     file 
+  
+  *) During the order process, the zone wasn't appearing in the formatted
+     addresses when the zone was in the database.
+
+  *) The number of decimal places of the tax rate shown on the checkout
+     confirmation page has been reduced to 2.
+
+  *) The url_clicked and date_last_clicked attributes of the manufacturers_info
+     table, are now being updated when a user clicks on the manufacturer
+     link to view the home page.
+
+  *) When registering or adding / editing an address, the state is checked, 
+     and a drop list of valid states is provided if they exist in the DB
+     and if the entered state is invalid.
+  
+  *) Support for PostgreSQL 8.2 . A table creation and population script is 
+     included in this version.
+  
+  *) Fixed a bug to display the list of bestsellers properly in the UI.
+
+
+Changes with KonaKart 2.1.0.1
+=============================
+
+  *) Support for MySQL 5.x . Previous version only functioned correctly 
+     with MySQL 4.x.
+
+  *) Addition of an IPN History table. This table stores the instant
+     product notification data returned by payment gateways.
+
+  *) Fixes to various minor bugs.

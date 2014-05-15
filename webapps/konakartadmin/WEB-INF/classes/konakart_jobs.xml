@@ -1,0 +1,351 @@
+<?xml version='1.0' encoding='utf-8'?>
+<job-scheduling-data
+	xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData 
+  http://www.quartz-scheduler.org/xml/job_scheduling_data_2_0.xsd"
+	version="2.0">
+
+	<pre-processing-commands>
+		<delete-jobs-in-group>*</delete-jobs-in-group>  <!-- clear all jobs in scheduler -->
+		<delete-triggers-in-group>*</delete-triggers-in-group> <!-- clear all triggers in scheduler -->
+	</pre-processing-commands>
+
+	<processing-directives>
+		<!--
+			if there are any jobs/triggers in scheduler of same name (as in this
+			file), overwrite them
+		-->
+		<overwrite-existing-data>true</overwrite-existing-data>
+		<!--
+			if there are any jobs/triggers in scheduler of same name (as in this
+			file), and over-write is false, ignore them rather then generating an
+			error
+		-->
+		<ignore-duplicates>false</ignore-duplicates>
+	</processing-directives>
+
+	<schedule>
+		<job>
+			<name>CountCustomers</name>
+			<group>KonaKart Batch Jobs</group>
+			<description>A Simple Example that Counts the Customers in Each Store</description>
+			<job-class>com.konakartadmin.bl.ExecuteMultiStoreBatchEE</job-class>
+			<durability>false</durability>
+			<recover>false</recover>
+			<job-data-map>
+				<entry>
+					<key>credentialsFile</key>
+					<value>konakart_jobs.properties</value>
+				</entry>
+				<entry>
+					<key>executionClass</key>
+					<value>com.konakartadmin.bl.AdminCustomerBatchMgr</value>
+				</entry>
+				<entry>
+					<key>executionMethod</key>
+					<value>countCustomersBatch</value>
+				</entry>
+				<entry>
+					<key>param0</key>
+					<value>countCustomersBatch</value>
+				</entry>
+				<entry>
+					<key>param1</key>
+					<value>true</value>
+				</entry>
+			</job-data-map>
+		</job>
+		<trigger>
+			<cron>
+				<name>CountCustomersTrigger</name>
+				<group>KonaKart Triggers</group>
+				<description>Trigger for CountCustomers</description>
+				<job-name>CountCustomers</job-name>
+				<job-group>KonaKart Batch Jobs</job-group>
+				<!-- every hour           0 0 * ? * *    -->
+				<!-- every 30 seconds     0,30 * * ? * * -->
+				<!-- every day @ 9:00pm   0 0 21 ? * *   -->
+				<cron-expression>0 4 21 ? * *</cron-expression>
+			</cron>
+		</trigger>
+
+		<job>
+			<name>RemoveExpiredCustomers</name>
+			<group>KonaKart Batch Jobs</group>
+			<description>Removes expired Customers for privacy and performance</description>
+			<job-class>com.konakartadmin.bl.ExecuteBatchEE</job-class>
+			<durability>false</durability>
+			<recover>false</recover>
+			<job-data-map>
+				<entry>
+					<key>credentialsFile</key>
+					<value>konakart_jobs.properties</value>
+				</entry>
+				<entry>
+					<key>executionClass</key>
+					<value>com.konakartadmin.bl.AdminCustomerBatchMgr</value>
+				</entry>
+				<entry>
+					<key>executionMethod</key>
+					<value>removeExpiredCustomersBatch</value>
+				</entry>
+				<entry>
+					<key>param0</key>
+					<value>removeExpiredCustomers</value>
+				</entry>
+				<entry>
+					<key>param1</key>
+					<value>true</value>
+				</entry>
+				<entry>
+					<key>param2</key>
+					<value>25</value>
+				</entry>
+				<entry>
+					<key>param3</key>
+					<value>0-1-3</value>
+				</entry>
+			</job-data-map>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>RemoveExpiredCustomersTrigger</name>
+				<group>KonaKart Triggers</group>
+				<description>Trigger for RemoveExpiredCustomers</description>
+				<job-name>RemoveExpiredCustomers</job-name>
+				<job-group>KonaKart Batch Jobs</job-group>
+				<!-- every hour           0 0 * ? * *    -->
+				<!-- every 30 seconds     0,30 * * ? * * -->
+				<!-- every day @ 9:00pm   0 0 21 ? * *   -->
+				<cron-expression>0 5 21 ? * *</cron-expression>
+			</cron>
+		</trigger>
+
+		<job>
+			<name>UnpaidOrderNotification</name>
+			<group>KonaKart Batch Jobs</group>
+			<description>Sends reminder mails to customers for unpaid orders</description>
+			<job-class>com.konakartadmin.bl.ExecuteBatchEE</job-class>
+			<durability>false</durability>
+			<recover>false</recover>
+			<job-data-map>
+				<entry>
+					<key>credentialsFile</key>
+					<value>konakart_jobs.properties</value>
+				</entry>
+				<entry>
+					<key>executionClass</key>
+					<value>com.konakartadmin.bl.AdminOrderBatchMgr</value>
+				</entry>
+				<entry>
+					<key>executionMethod</key>
+					<value>unpaidOrderNotificationBatch</value>
+				</entry>
+				<entry>
+					<key>param0</key>
+					<value>unpaid_order_batch</value>
+				</entry>
+				<entry>
+					<key>param1</key>
+					<value>true</value>
+				</entry>
+				<entry>
+					<key>param2</key>
+					<value>25</value>
+				</entry>
+				<entry>
+					<key>param3</key>
+					<value>NotifyUnpaidOrder</value>
+				</entry>
+				<entry>
+					<key>param4</key>
+					<value>3</value>
+				</entry>
+				<entry>
+					<key>param5</key>
+					<value>3</value>
+				</entry>
+				<entry>
+					<key>param6</key>
+					<value>7-8</value>
+				</entry>
+				<entry>
+					<key>param7</key>
+					<value>7</value>
+				</entry>
+			</job-data-map>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>UnpaidOrderNotificationTrigger</name>
+				<group>KonaKart Triggers</group>
+				<description>Trigger for UnpaidOrderNotification</description>
+				<job-name>UnpaidOrderNotification</job-name>
+				<job-group>KonaKart Batch Jobs</job-group>
+				<!-- every hour           0 0 * ? * *    -->
+				<!-- every 30 seconds     0,30 * * ? * * -->
+				<!-- every day @ 9:00pm   0 0 21 ? * *   -->
+				<cron-expression>0 10 21 ? * *</cron-expression>
+			</cron>
+		</trigger>
+
+		<job>
+			<name>ProductAvailabilityNotification</name>
+			<group>KonaKart Batch Jobs</group>
+			<description>Notifies customers when products become available</description>
+			<job-class>com.konakartadmin.bl.ExecuteBatchEE</job-class>
+			<durability>false</durability>
+			<recover>false</recover>
+			<job-data-map>
+				<entry>
+					<key>credentialsFile</key>
+					<value>konakart_jobs.properties</value>
+				</entry>
+				<entry>
+					<key>executionClass</key>
+					<value>com.konakartadmin.bl.AdminOrderBatchMgr</value>
+				</entry>
+				<entry>
+					<key>executionMethod</key>
+					<value>productAvailabilityNotificationBatch</value>
+				</entry>
+				<entry>
+					<key>param0</key>
+					<value>prod_avail_batch</value>
+				</entry>
+				<entry>
+					<key>param1</key>
+					<value>false</value>
+				</entry>
+				<entry>
+					<key>param2</key>
+					<value>25</value>
+				</entry>
+				<entry>
+					<key>param3</key>
+					<value>NotifyProductAvailability</value>
+				</entry>
+				<entry>
+					<key>param4</key>
+					<value>5</value>
+				</entry>
+			</job-data-map>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>ProductAvailabilityNotificationTrigger</name>
+				<group>KonaKart Triggers</group>
+				<description>Trigger for ProductAvailabilityNotification</description>
+				<job-name>ProductAvailabilityNotification</job-name>
+				<job-group>KonaKart Batch Jobs</job-group>
+				<!-- every hour           0 0 * ? * *    -->
+				<!-- every 30 seconds     0,30 * * ? * * -->
+				<!-- every day @ 9:00pm   0 0 21 ? * *   -->
+				<cron-expression>0 15 21 ? * *</cron-expression>
+			</cron>
+		</trigger>
+		
+		<job>
+			<name>CreateSitemap</name>
+			<group>KonaKart Batch Jobs</group>
+			<description>Creates a set of sitemap XML files</description>
+			<job-class>com.konakartadmin.bl.ExecuteBatchEE</job-class>
+			<durability>false</durability>
+			<recover>false</recover>
+			<job-data-map>
+				<entry>
+					<key>credentialsFile</key>
+					<value>konakart_jobs.properties</value>
+				</entry>
+				<entry>
+					<key>executionClass</key>
+					<value>com.konakartadmin.bl.AdminProductBatchMgr</value>
+				</entry>
+				<entry>
+					<key>executionMethod</key>
+					<value>createSitemapBatch</value>
+				</entry>
+				<entry>
+					<key>param0</key>
+					<value>create_sitemap_batch</value>
+				</entry>
+				<entry>
+					<key>param1</key>
+					<value>false</value>
+				</entry>
+				<entry>
+					<key>param2</key>
+					<value>500</value>
+				</entry>
+			</job-data-map>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>CreateSitemapNotificationTrigger</name>
+				<group>KonaKart Triggers</group>
+				<description>Trigger for CreateSitemap</description>
+				<job-name>CreateSitemap</job-name>
+				<job-group>KonaKart Batch Jobs</job-group>
+				<!-- every hour           0 0 * ? * *    -->
+				<!-- every 30 seconds     0,30 * * ? * * -->
+				<!-- every day @ 9:00pm   0 0 21 ? * *   -->
+				<cron-expression>0 15 21 ? * *</cron-expression>
+			</cron>
+		</trigger>
+		
+
+		<!-- CreateInvoices START
+		<job>
+			<name>CreateInvoices</name>
+			<group>KonaKart Batch Jobs</group>
+			<description>Creates Invoices for Orders in a specified state</description>
+			<job-class>com.konakartadmin.bl.ExecuteBatchEE</job-class>
+			<durability>false</durability>
+			<recover>false</recover>
+			<job-data-map>
+				<entry>
+					<key>credentialsFile</key>
+					<value>konakart_jobs.properties</value>
+				</entry>
+				<entry>
+					<key>executionClass</key>
+					<value>com.konakartadmin.bl.AdminOrderBatchMgr</value>
+				</entry>
+				<entry>
+					<key>executionMethod</key>
+					<value>createInvoicesBatch</value>
+				</entry>
+				<entry>
+					<key>param0</key>
+					<value>create_invoices_batch</value>
+				</entry>
+				<entry>
+					<key>param1</key>
+					<value>true</value>
+				</entry>
+				<entry>
+					<key>param2</key>
+					<value>10</value>
+				</entry>
+			</job-data-map>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>CreateInvoicesTrigger</name>
+				<group>KonaKart Triggers</group>
+				<description>Trigger for CreateInvoices</description>
+				<job-name>CreateInvoices</job-name>
+				<job-group>KonaKart Batch Jobs</job-group>
+				<cron-expression>0 25 21 ? * *</cron-expression>       
+			</cron>
+		</trigger>
+	CreateInvoices END -->   
+
+	</schedule>
+</job-scheduling-data>
