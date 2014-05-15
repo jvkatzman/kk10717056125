@@ -12534,3 +12534,35 @@ May 13, 2014 20:48:44 -0400 NewRelic 9 INFO: Agent run id: 538392423
 May 13, 2014 20:48:44 -0400 NewRelic 9 INFO: Agent 1167@konakart-dev/KonaKart Dev connected to collector.newrelic.com:443
 May 13, 2014 20:48:44 -0400 NewRelic 9 INFO: Real user monitoring is enabled with auto instrumentation for application "KonaKart Dev"
 May 13, 2014 20:48:44 -0400 NewRelic 9 INFO: Errors will be sent to New Relic for KonaKart Dev
+May 15, 2014 13:01:09 -0400 NewRelic 5 INFO: JVM is shutting down
+May 15, 2014 13:01:10 -0400 NewRelic 5 INFO: New Relic Agent has shutdown
+May 15, 2014 13:01:18 -0400 NewRelic 1 INFO: Writing to New Relic log file: /usr/local/konakart/newrelic/logs/newrelic_agent.log
+May 15, 2014 13:01:18 -0400 NewRelic 1 INFO: Agent Host: konakart-dev IP: 127.0.1.1
+May 15, 2014 13:01:20 -0400 NewRelic 1 ERROR: javax/servlet/ServletOutputStream is marked as a weaved class, but no methods are matched to be weaved.
+May 15, 2014 13:01:20 -0400 NewRelic 1 ERROR: javax/servlet/ServletInputStream is marked as a weaved class, but no methods are matched to be weaved.
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: Configured to connect to New Relic at collector.newrelic.com:443
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: Setting audit_mode to false
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: Setting protocol to "https"
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: Configuration file is /usr/local/konakart/newrelic/./newrelic.yml
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: New Relic Agent v3.2.0 has started
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: Java version: 1.6.0_27
+May 15, 2014 13:01:24 -0400 NewRelic 1 INFO: Agent class loader: sun.misc.Launcher$AppClassLoader@535ff48b
+May 15, 2014 13:01:24 -0400 NewRelic 5 INFO: JVM is shutting down
+May 15, 2014 13:01:24 -0400 NewRelic 5 INFO: New Relic Agent has shutdown
+May 15, 2014 13:01:33 -0400 NewRelic 1 INFO: Writing to New Relic log file: /usr/local/konakart/newrelic/logs/newrelic_agent.log
+May 15, 2014 13:01:33 -0400 NewRelic 1 INFO: Agent Host: konakart-dev IP: 127.0.1.1
+May 15, 2014 13:01:35 -0400 NewRelic 1 ERROR: javax/servlet/ServletOutputStream is marked as a weaved class, but no methods are matched to be weaved.
+May 15, 2014 13:01:35 -0400 NewRelic 1 ERROR: javax/servlet/ServletInputStream is marked as a weaved class, but no methods are matched to be weaved.
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: Configured to connect to New Relic at collector.newrelic.com:443
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: Setting audit_mode to false
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: Setting protocol to "https"
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: Configuration file is /usr/local/konakart/newrelic/./newrelic.yml
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: New Relic Agent v3.2.0 has started
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: Java version: 1.6.0_27
+May 15, 2014 13:01:39 -0400 NewRelic 1 INFO: Agent class loader: sun.misc.Launcher$AppClassLoader@535ff48b
+May 15, 2014 13:01:55 -0400 NewRelic 17 INFO: Server Info: Apache Tomcat/7.0.22
+May 15, 2014 13:03:39 -0400 NewRelic 9 INFO: Collector redirection to collector-115.newrelic.com:443
+May 15, 2014 13:03:40 -0400 NewRelic 9 INFO: Agent run id: 541309741
+May 15, 2014 13:03:40 -0400 NewRelic 9 INFO: Agent 23039@konakart-dev/KonaKart Dev connected to collector.newrelic.com:443
+May 15, 2014 13:03:40 -0400 NewRelic 9 INFO: Real user monitoring is enabled with auto instrumentation for application "KonaKart Dev"
+May 15, 2014 13:03:40 -0400 NewRelic 9 INFO: Errors will be sent to New Relic for KonaKart Dev
